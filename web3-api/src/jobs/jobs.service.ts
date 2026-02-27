@@ -20,7 +20,7 @@ export class JobsService {
 
     // Only show published jobs for regular queries
     if (!status) {
-      where.status = JobStatus.published;
+      where.status = JobStatus.PUBLISHED;
     } else {
       where.status = status;
     }

@@ -1,7 +1,10 @@
-import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
+// Prisma 7 requires explicit datasource configuration
+const prisma = new PrismaClient({
+  datasourceUrl: process.env.DATABASE_URL,
+});
 
 async function main() {
   console.log('🌱 Starting seed...');
@@ -9,26 +12,29 @@ async function main() {
   // Hash password for test users
   const hashedPassword = await bcrypt.hash('password123', 10);
 
+  // Delete existing data for clean seed
+  await prisma.application.deleteMany({});
+  await prisma.message.deleteMany({});
+  await prisma.job.deleteMany({});
+  await prisma.user.deleteMany({});
+  console.log('🗑️  Existing data deleted');
+
   // Create users
-  const adminUser = await prisma.user.upsert({
-    where: { email: 'admin@web3jobs.com' },
-    update: {},
-    create: {
+  const adminUser = await prisma.user.create({
+    data: {
       email: 'admin@web3jobs.com',
       name: 'Admin User',
       passwordHash: hashedPassword,
-      role: 'admin',
+      role: 'ADMIN',
     },
   });
 
-  const testUser = await prisma.user.upsert({
-    where: { email: 'user@web3jobs.com' },
-    update: {},
-    create: {
+  const testUser = await prisma.user.create({
+    data: {
       email: 'user@web3jobs.com',
       name: 'Test User',
       passwordHash: hashedPassword,
-      role: 'user',
+      role: 'USER',
     },
   });
 
@@ -50,8 +56,8 @@ async function main() {
       ],
       skills: ['Solidity', 'Web3.js', 'DeFi', 'Ethereum'],
       type: 'FULL_TIME',
-      status: 'published',
-      postedBy: { connect: { id: adminUser.id } },
+      status: 'PUBLISHED',
+      postedById: adminUser.id,
     },
   });
 
@@ -70,8 +76,8 @@ async function main() {
       ],
       skills: ['React', 'TypeScript', 'Web3', 'DeFi'],
       type: 'FULL_TIME',
-      status: 'published',
-      postedBy: { connect: { id: adminUser.id } },
+      status: 'PUBLISHED',
+      postedById: adminUser.id,
     },
   });
 
@@ -90,8 +96,8 @@ async function main() {
       ],
       skills: ['Solidity', 'Security', 'Auditing', 'DeFi'],
       type: 'FULL_TIME',
-      status: 'published',
-      postedBy: { connect: { id: adminUser.id } },
+      status: 'PUBLISHED',
+      postedById: adminUser.id,
     },
   });
 
@@ -110,8 +116,8 @@ async function main() {
       ],
       skills: ['Go', 'Rust', 'Blockchain', 'API'],
       type: 'FULL_TIME',
-      status: 'published',
-      postedBy: { connect: { id: adminUser.id } },
+      status: 'PUBLISHED',
+      postedById: adminUser.id,
     },
   });
 
@@ -122,7 +128,7 @@ async function main() {
     data: {
       jobId: job1.id,
       userId: testUser.id,
-      status: 'pending',
+      status: 'PENDING',
       coverLetter: '我对这个职位非常感兴趣，期待能加入团队！',
     },
   });

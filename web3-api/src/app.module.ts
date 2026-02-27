@@ -7,6 +7,8 @@ import { AuthModule } from './auth/auth.module';
 import { JobsModule } from './jobs/jobs.module';
 import { MessagesModule } from './messages/messages.module';
 import { ApplicationsModule } from './applications/applications.module';
+import { Web3Module } from './web3/web3.module';
+import { WalletProfilesModule } from './wallet-profiles/wallet-profiles.module';
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import { ApplicationsModule } from './applications/applications.module';
     JobsModule,
     MessagesModule,
     ApplicationsModule,
+    Web3Module,
+    WalletProfilesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

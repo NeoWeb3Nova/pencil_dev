@@ -7,120 +7,191 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 // ============================================
-// User Role Enum
+// Enums
 // ============================================
+
 enum Role {
-  user
-  admin
+  USER
+  ADMIN
+  VERIFIED_EMPLOYER
 }
 
-// ============================================
-// Job Type Enum
-// ============================================
+enum ChainVerificationStatus {
+  NOT_VERIFIED
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum WalletType {
+  METAMASK
+  WALLET_CONNECT
+  COINBASE_WALLET
+  LEDGER
+  OTHER
+}
+
+enum JobLocationType {
+  ONSITE
+  REMOTE
+  HYBRID
+}
+
 enum JobType {
   FULL_TIME
   CONTRACT
   PART_TIME
+  FREELANCE
+  INTERNSHIP
 }
 
-// ============================================
-// Job Status Enum
-// ============================================
 enum JobStatus {
-  draft
-  published
-  closed
+  DRAFT
+  PUBLISHED
+  PAUSED
+  CLOSED
+  FILLED
 }
 
-// ============================================
-// Application Status Enum
-// ============================================
 enum ApplicationStatus {
-  pending
-  reviewed
-  accepted
-  rejected
+  PENDING
+  REVIEWED
+  INTERVIEW_SCHEDULED
+  ACCEPTED
+  REJECTED
+  WITHDRAWN
 }
 
 // ============================================
 // Models
 // ============================================
 
-/// User account model
+/// User account model with Web3 support
 model User {
-  id            String   @id @default(uuid())
-  email         String   @unique
-  passwordHash  String   @map("password_hash")
-  name          String
-  role          Role     @default(user)
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  id              String                @id @default(cuid())
+  email           String?               @unique
+  passwordHash    String?               @map("password_hash")
+  walletAddress   String?               @unique @map("wallet_address")
+  name            String
+  avatarUrl       String?               @map("avatar_url")
+  role            Role                  @default(USER)
+  emailVerified   Boolean               @default(false) @map("email_verified")
+
+  // Web3 specific fields
+  nftAvatarTokenId String?              @map("nft_avatar_token_id")
+  chainVerification ChainVerificationStatus @default(NOT_VERIFIED) @map("chain_verification")
+
+  // Time
+  createdAt       DateTime              @default(now()) @map("created_at")
+  updatedAt       DateTime              @updatedAt @map("updated_at")
 
   // Relations
-  postedJobs    Job[]          @relation("PostedJobs")
-  sentMessages  Message[]      @relation("SentMessages")
-  receivedMessages Message[]   @relation("ReceivedMessages")
-  applications  Application[]
+  postedJobs      Job[]                 @relation("PostedJobs")
+  sentMessages    Message[]             @relation("SentMessages")
+  receivedMessages Message[]            @relation("ReceivedMessages")
+  applications    Application[]
+  walletProfiles  WalletProfile[]
 
   @@map("users")
 }
 
-/// Job posting model
+/// Wallet profile model for Web3 users
+model WalletProfile {
+  id              String     @id @default(cuid())
+  userId          String     @map("user_id")
+  user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  walletAddress   String     @unique @map("wallet_address")
+  walletType      WalletType @default(METAMASK) @map("wallet_type")
+  isPrimary       Boolean    @default(false) @map("is_primary")
+  verifiedAt      DateTime   @default(now()) @map("verified_at")
+
+  // On-chain reputation data
+  reputationScore Int        @default(0) @map("reputation_score")
+  transactionCount Int       @default(0) @map("transaction_count")
+
+  // Time
+  createdAt       DateTime   @default(now()) @map("created_at")
+  updatedAt       DateTime   @updatedAt @map("updated_at")
+
+  @@map("wallet_profiles")
+}
+
+/// Job posting model with Web3 support
 model Job {
-  id          String     @id @default(uuid())
-  title       String
-  company     String
-  location    String
-  salaryMin   Int?       @map("salary_min")
-  salaryMax   Int?       @map("salary_max")
-  description String
-  requirements String[]
-  skills      String[]
-  type        JobType    @default(FULL_TIME)
-  status      JobStatus  @default(draft)
-  postedById  String     @map("posted_by")
-  postedBy    User       @relation("PostedJobs", fields: [postedById], references: [id])
-  createdAt   DateTime   @default(now()) @map("created_at")
-  updatedAt   DateTime   @updatedAt @map("updated_at")
+  id              String        @id @default(cuid())
+  title           String
+  company         String
+  location        String
+  locationType    JobLocationType @default(ONSITE) @map("location_type")
+  salaryMin       Int?          @map("salary_min")
+  salaryMax       Int?          @map("salary_max")
+  currency        String        @default("USD")
+  description     String        @db.Text
+  requirements    String[]
+  skills          String[]
+  type            JobType       @default(FULL_TIME)
+  status          JobStatus     @default(DRAFT)
+  postedById      String        @map("posted_by")
+  postedBy        User          @relation("PostedJobs", fields: [postedById], references: [id])
+
+  // Web3 specific fields
+  cryptoPaymentEnabled Boolean  @default(false) @map("crypto_payment_enabled")
+  acceptedTokens    String[]    @default([]) @map("accepted_tokens")
+  smartContractAddress String?  @unique @map("smart_contract_address")
+  blockchainNetwork String?     @default("ethereum") @map("blockchain_network")
+
+  // Time
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
 
   // Relations
-  messages      Message[]
-  applications  Application[]
+  messages       Message[]
+  applications   Application[]
 
   @@map("jobs")
 }
 
 /// Message model for communication between users
 model Message {
-  id         String   @id @default(uuid())
+  id         String   @id @default(cuid())
   jobId      String
   job        Job      @relation(fields: [jobId], references: [id])
   senderId   String
   sender     User     @relation("SentMessages", fields: [senderId], references: [id])
   receiverId String
   receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
-  content    String
+  content    String   @db.Text
   isRead     Boolean  @default(false) @map("is_read")
   createdAt  DateTime @default(now()) @map("created_at")
 
+  @@index([jobId, createdAt])
+  @@index([senderId, createdAt])
+  @@index([receiverId, createdAt])
   @@map("messages")
 }
 
-/// Job application model
+/// Job application model with Web3 support
 model Application {
-  id         String             @id @default(uuid())
-  jobId      String
-  job        Job                @relation(fields: [jobId], references: [id])
-  userId     String
-  user       User               @relation(fields: [userId], references: [id])
-  status     ApplicationStatus  @default(pending)
-  resumeUrl  String?            @map("resume_url")
-  coverLetter String?           @map("cover_letter") @db.Text
-  createdAt  DateTime           @default(now()) @map("created_at")
-  updatedAt  DateTime           @updatedAt @map("updated_at")
+  id            String   @id @default(cuid())
+  jobId         String
+  job           Job      @relation(fields: [jobId], references: [id])
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  status        ApplicationStatus @default(PENDING)
+  resumeUrl     String?  @map("resume_url")
+  coverLetter   String?  @map("cover_letter") @db.Text
+
+  // Web3 specific fields
+  onChainProof  String?  @map("on_chain_proof")
+  chainVerified Boolean  @default(false) @map("chain_verified")
+
+  // Time
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
 
   @@unique([jobId, userId])
   @@map("applications")
