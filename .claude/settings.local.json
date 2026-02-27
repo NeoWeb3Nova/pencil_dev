@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pencil_mcp__get_editor_state)",
+      "Bash(dir)",
+      "Bash(pencil_mcp.get_editor_state)",
+      "Bash(npx --version)",
+      "Bash(node -e \"console.log\\(''test''\\)\")",
+      "Bash(dir /b D:Testpencil_dev)",
+      "Bash(Get-Command pencil)",
+      "Bash(Get-Command npx)",
+      "Bash(com.clue.get_open_documents)",
+      "Bash(com.claude.get_open_documents)",
+      "Bash(node -e \"const {pencil_mcp_get_editor_state} = require\\(''./pencil_mcp''\\); pencil_mcp_get_editor_state\\(\\);\")"
+    ]
+  }
+}
