@@ -7,7 +7,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 // ============================================
@@ -22,9 +21,9 @@ enum Role {
 // Job Type Enum
 // ============================================
 enum JobType {
-  full-time
-  contract
-  part-time
+  FULL_TIME
+  CONTRACT
+  PART_TIME
 }
 
 // ============================================
@@ -80,7 +79,7 @@ model Job {
   description String
   requirements String[]
   skills      String[]
-  type        JobType    @default(full-time)
+  type        JobType    @default(FULL_TIME)
   status      JobStatus  @default(draft)
   postedById  String     @map("posted_by")
   postedBy    User       @relation("PostedJobs", fields: [postedById], references: [id])
