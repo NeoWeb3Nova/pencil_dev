@@ -15,7 +15,23 @@
       "Bash(python:*)",
       "Bash(\"D:\\\\Test\\\\pencil_dev\\\\web3-job-app.pen\":*)",
       "Bash(ping:*)",
-      "Bash(jps:*)"
+      "Bash(jps:*)",
+      "WebSearch",
+      "Bash(pencil_mcp__open_document:*)",
+      "Bash(env:*)",
+      "Bash(npx create-expo-app@latest:*)",
+      "Bash(npx expo:*)",
+      "Bash(ls:*)",
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "Bash(pkill:*)",
+      "Bash(npm start:*)",
+      "Bash(netstat:*)",
+      "Bash(taskkill:*)",
+      "Bash(powershell:*)",
+      "Bash(curl:*)",
+      "Bash(start:*)",
+      "Bash(export:*)"
     ]
   }
 }

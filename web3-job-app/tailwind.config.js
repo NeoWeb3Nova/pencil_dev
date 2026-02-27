@@ -1,0 +1,75 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    './app/**/*.{js,jsx,ts,tsx}',
+    './components/**/*.{js,jsx,ts,tsx}',
+    './lib/**/*.{js,jsx,ts,tsx}',
+    './store/**/*.{js,jsx,ts,tsx}',
+    './types/**/*.{js,jsx,ts,tsx}',
+  ],
+  presets: [require('nativewind/preset')],
+  theme: {
+    extend: {
+      colors: {
+        primary: {
+          DEFAULT: '#6366F1',
+          light: '#C7D2FE',
+          dark: '#4F46E5',
+        },
+        dark: '#18181B',
+        secondary: '#71717A',
+        muted: '#A1A1AA',
+        border: '#E4E4E7',
+        background: '#FAFAFA',
+        card: '#FFFFFF',
+        gray: {
+          100: '#F4F4F5',
+          200: '#E4E4E7',
+          300: '#D4D4D8',
+          400: '#A1A1AA',
+          500: '#71717A',
+          600: '#52525B',
+          700: '#3F3F46',
+          800: '#27272A',
+          900: '#18181B',
+        },
+      },
+      spacing: {
+        xs: '4',
+        sm: '8',
+        md: '12',
+        lg: '16',
+        xl: '20',
+        xxl: '24',
+      },
+      borderRadius: {
+        sm: '4',
+        md: '8',
+        lg: '12',
+        xl: '16',
+        full: '9999',
+      },
+      fontSize: {
+        xs: ['10px', { lineHeight: '14px', fontWeight: '600' }],
+        sm: ['12px', { lineHeight: '16px', fontWeight: '600' }],
+        base: ['14px', { lineHeight: '20px', fontWeight: '400' }],
+        medium: ['14px', { lineHeight: '20px', fontWeight: '500' }],
+        lg: ['16px', { lineHeight: '24px', fontWeight: '500' }],
+        xl: ['18px', { lineHeight: '28px', fontWeight: '600' }],
+        '2xl:': ['20px', { lineHeight: '28px', fontWeight: '600' }],
+        '3xl': ['24px', { lineHeight: '32px', fontWeight: '700' }],
+      },
+      fontFamily: {
+        sans: ['Inter', 'System'],
+        display: ['Inter', 'System'],
+      },
+      boxShadow: {
+        sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        DEFAULT: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)',
+        md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)',
+        lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1)',
+      },
+    },
+  },
+  plugins: [],
+};
