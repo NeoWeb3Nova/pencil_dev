@@ -11,7 +11,11 @@
       "Bash(Get-Command npx)",
       "Bash(com.clue.get_open_documents)",
       "Bash(com.claude.get_open_documents)",
-      "Bash(node -e \"const {pencil_mcp_get_editor_state} = require\\(''./pencil_mcp''\\); pencil_mcp_get_editor_state\\(\\);\")"
+      "Bash(node -e \"const {pencil_mcp_get_editor_state} = require\\(''./pencil_mcp''\\); pencil_mcp_get_editor_state\\(\\);\")",
+      "Bash(python:*)",
+      "Bash(\"D:\\\\Test\\\\pencil_dev\\\\web3-job-app.pen\":*)",
+      "Bash(ping:*)",
+      "Bash(jps:*)"
     ]
   }
 }
