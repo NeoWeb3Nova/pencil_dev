@@ -1,0 +1,128 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// User Role Enum
+// ============================================
+enum Role {
+  user
+  admin
+}
+
+// ============================================
+// Job Type Enum
+// ============================================
+enum JobType {
+  full-time
+  contract
+  part-time
+}
+
+// ============================================
+// Job Status Enum
+// ============================================
+enum JobStatus {
+  draft
+  published
+  closed
+}
+
+// ============================================
+// Application Status Enum
+// ============================================
+enum ApplicationStatus {
+  pending
+  reviewed
+  accepted
+  rejected
+}
+
+// ============================================
+// Models
+// ============================================
+
+/// User account model
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  passwordHash  String   @map("password_hash")
+  name          String
+  role          Role     @default(user)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  postedJobs    Job[]          @relation("PostedJobs")
+  sentMessages  Message[]      @relation("SentMessages")
+  receivedMessages Message[]   @relation("ReceivedMessages")
+  applications  Application[]
+
+  @@map("users")
+}
+
+/// Job posting model
+model Job {
+  id          String     @id @default(uuid())
+  title       String
+  company     String
+  location    String
+  salaryMin   Int?       @map("salary_min")
+  salaryMax   Int?       @map("salary_max")
+  description String
+  requirements String[]
+  skills      String[]
+  type        JobType    @default(full-time)
+  status      JobStatus  @default(draft)
+  postedById  String     @map("posted_by")
+  postedBy    User       @relation("PostedJobs", fields: [postedById], references: [id])
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  // Relations
+  messages      Message[]
+  applications  Application[]
+
+  @@map("jobs")
+}
+
+/// Message model for communication between users
+model Message {
+  id         String   @id @default(uuid())
+  jobId      String
+  job        Job      @relation(fields: [jobId], references: [id])
+  senderId   String
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id])
+  receiverId String
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  content    String
+  isRead     Boolean  @default(false) @map("is_read")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@map("messages")
+}
+
+/// Job application model
+model Application {
+  id         String             @id @default(uuid())
+  jobId      String
+  job        Job                @relation(fields: [jobId], references: [id])
+  userId     String
+  user       User               @relation(fields: [userId], references: [id])
+  status     ApplicationStatus  @default(pending)
+  resumeUrl  String?            @map("resume_url")
+  coverLetter String?           @map("cover_letter") @db.Text
+  createdAt  DateTime           @default(now()) @map("created_at")
+  updatedAt  DateTime           @updatedAt @map("updated_at")
+
+  @@unique([jobId, userId])
+  @@map("applications")
+}
