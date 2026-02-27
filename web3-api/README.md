@@ -1,98 +1,207 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Web3 Job App API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+NestJS backend API for the Web3 Job Application platform.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Tech Stack
 
-## Description
+- **Framework**: NestJS 11
+- **Database**: PostgreSQL 15
+- **ORM**: Prisma 7
+- **Authentication**: JWT with Passport
+- **Validation**: class-validator, class-transformer
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Getting Started
 
-## Project setup
+### Prerequisites
+
+- Node.js 18+
+- PostgreSQL 15+ (or Docker for local development)
+- npm or yarn
+
+### Installation
+
+1. **Install dependencies**
 
 ```bash
-$ npm install
+npm install
 ```
 
-## Compile and run the project
+2. **Start PostgreSQL (using Docker)**
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+docker-compose up -d
 ```
 
-## Run tests
+3. **Configure environment variables**
+
+The `.env` file contains the database connection string and JWT configuration:
+
+```env
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/web3-job-app?schema=public"
+JWT_SECRET="your-super-secret-jwt-key-change-in-production"
+JWT_EXPIRATION="7d"
+```
+
+4. **Generate Prisma Client**
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm run prisma:generate
 ```
 
-## Deployment
+5. **Run database migrations**
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+> Note: Make sure PostgreSQL is running before running migrations
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npm run prisma:migrate
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+6. **Seed the database (optional)**
 
-## Resources
+```bash
+npm run prisma:seed
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+7. **Start the development server**
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```bash
+npm run start:dev
+```
 
-## Support
+The API will be available at `http://localhost:3000`
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## API Endpoints
 
-## Stay in touch
+### Authentication
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/api/auth/register` | Register new user | No |
+| POST | `/api/auth/login` | Login user | No |
+| GET | `/api/auth/profile` | Get user profile | Yes |
+| POST | `/api/auth/profile` | Update user profile | Yes |
 
-## License
+### Jobs
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| GET | `/api/jobs` | List all jobs | No |
+| GET | `/api/jobs/:id` | Get job details | No |
+| POST | `/api/jobs` | Create new job | Yes |
+| PUT | `/api/jobs/:id` | Update job | Yes (owner only) |
+| DELETE | `/api/jobs/:id` | Delete job | Yes (owner only) |
+| GET | `/api/jobs/user/me` | Get user's posted jobs | Yes |
+
+**Query Parameters for GET /api/jobs:**
+- `page` - Page number (default: 1)
+- `limit` - Items per page (default: 10)
+- `search` - Search keyword
+- `type` - Filter by job type (FULL_TIME, CONTRACT, PART_TIME)
+- `status` - Filter by status (draft, published, closed)
+
+### Applications
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/api/applications` | Apply for a job | Yes |
+| GET | `/api/applications/my-applications` | Get user's applications | Yes |
+| GET | `/api/applications/:id` | Get application details | Yes |
+| GET | `/api/applications/job/:jobId` | Get all applications for a job | Yes (owner only) |
+| POST | `/api/applications/:id/status` | Update application status | Yes (job owner only) |
+
+### Messages
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| GET | `/api/messages` | Get user's messages | Yes |
+| GET | `/api/messages/unread-count` | Get unread message count | Yes |
+| GET | `/api/messages/:id` | Get message details | Yes |
+| POST | `/api/messages` | Send a message | Yes |
+| POST | `/api/messages/:id/read` | Mark message as read | Yes |
+
+## Default Users (after seeding)
+
+| Email | Password | Role |
+|-------|----------|------|
+| admin@web3jobs.com | password123 | admin |
+| user@web3jobs.com | password123 | user |
+
+## Development Commands
+
+```bash
+# Generate Prisma Client
+npm run prisma:generate
+
+# Run migrations
+npm run prisma:migrate
+
+# Seed database
+npm run prisma:seed
+
+# Open Prisma Studio (database GUI)
+npm run prisma:studio
+
+# Start development server
+npm run start:dev
+
+# Build for production
+npm run build
+
+# Run production server
+npm run start:prod
+
+# Run tests
+npm run test
+npm run test:e2e
+```
+
+## Database Schema
+
+```
+users
+├── id (UUID, PK)
+├── email (unique)
+├── password_hash
+├── name
+├── role (user | admin)
+└── created_at, updated_at
+
+jobs
+├── id (UUID, PK)
+├── title
+├── company
+├── location
+├── salary_min, salary_max
+├── description
+├── requirements (TEXT[])
+├── skills (TEXT[])
+├── type (FULL_TIME | CONTRACT | PART_TIME)
+├── status (draft | published | closed)
+├── posted_by (FK → users)
+└── created_at, updated_at
+
+messages
+├── id (UUID, PK)
+├── job_id (FK → jobs)
+├── sender_id (FK → users)
+├── receiver_id (FK → users)
+├── content
+├── is_read
+└── created_at
+
+applications
+├── id (UUID, PK)
+├── job_id (FK → jobs)
+├── user_id (FK → users)
+├── status (pending | reviewed | accepted | rejected)
+├── resume_url
+├── cover_letter
+└── created_at, updated_at
+```
+
+## Security Notes
+
+- Change the `JWT_SECRET` in production
+- Use HTTPS in production
+- Implement rate limiting for production
+- Rotate secrets regularly

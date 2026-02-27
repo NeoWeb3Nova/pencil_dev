@@ -13,6 +13,14 @@ export interface Job {
   logo?: string;
   type: 'full-time' | 'contract' | 'part-time';
   postedAt: string;
+  status?: 'draft' | 'published' | 'closed';
+  postedBy?: {
+    id: string;
+    name: string;
+    email: string;
+  };
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 // 消息类型定义
@@ -38,6 +46,47 @@ export interface UserProfile {
   };
 }
 
+// 认证相关类型
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface RegisterRequest {
+  email: string;
+  password: string;
+  name: string;
+}
+
+export interface AuthResponse {
+  access_token: string;
+  user: {
+    id: string;
+    email: string;
+    name: string;
+    role: 'user' | 'admin';
+  };
+}
+
+// 申请类型
+export interface Application {
+  id: string;
+  jobId: string;
+  userId: string;
+  status: 'pending' | 'reviewed' | 'accepted' | 'rejected';
+  resumeUrl?: string;
+  coverLetter?: string;
+  createdAt: string;
+  updatedAt: string;
+  job?: Job;
+}
+
+export interface CreateApplicationRequest {
+  jobId: string;
+  resumeUrl?: string;
+  coverLetter?: string;
+}
+
 // 导航类型
 export type TabStackParamList = {
   index: undefined;
@@ -60,5 +109,6 @@ export interface ApiResponse<T> {
     total?: number;
     page?: number;
     limit?: number;
+    totalPages?: number;
   };
 }
