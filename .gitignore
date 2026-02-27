@@ -1,0 +1,71 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+web-build/
+*.tsbuildinfo
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+
+# IDE and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Expo
+.expo/
+expo-env.d.ts
+
+# Native builds
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+/ios
+/android
+
+# Logs
+logs/
+*.log
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# Metro
+.metro-health-check*
+
+# Testing
+coverage/
+.nyc_output/
+
+# Next.js
+.next/
+out/
+
+# NestJS
+.tmp/
+.temp/
+
+# TypeScript
+tsconfig.tsbuildinfo
+tsconfig.build.tsbuildinfo
+
+# Lock files (keep root, ignore subdirectories)
+web3-api/package-lock.json
+web3-api/yarn.lock
+
+# Pencil generated files
+*.pen
