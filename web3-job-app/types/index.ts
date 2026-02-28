@@ -112,3 +112,109 @@ export interface ApiResponse<T> {
     totalPages?: number;
   };
 }
+
+// ============================================
+// Resume Types
+// ============================================
+
+export interface Experience {
+  company: string;
+  position: string;
+  startDate: string;
+  endDate?: string;
+  current?: boolean;
+  description?: string;
+}
+
+export interface Education {
+  school: string;
+  degree?: string;
+  field?: string;
+  startDate: string;
+  endDate?: string;
+  gpa?: string;
+}
+
+export interface Project {
+  name: string;
+  description: string;
+  url?: string;
+  technologies?: string[];
+  startDate?: string;
+  endDate?: string;
+}
+
+export interface Certification {
+  name: string;
+  issuer: string;
+  issueDate?: string;
+  expireDate?: string;
+  credentialId?: string;
+}
+
+export interface Language {
+  language: string;
+  proficiency: string;
+}
+
+export interface Resume {
+  id: string;
+  userId: string;
+  fullName: string;
+  title?: string;
+  summary?: string;
+  email: string;
+  phone?: string;
+  location?: string;
+  website?: string;
+  linkedinUrl?: string;
+  githubUrl?: string;
+  experiences?: Experience[];
+  education?: Education[];
+  skills: string[];
+  projects?: Project[];
+  certifications?: Certification[];
+  languages?: Language[];
+  isPublic: boolean;
+  lastViewedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateResumeRequest {
+  fullName: string;
+  title?: string;
+  summary?: string;
+  email: string;
+  phone?: string;
+  location?: string;
+  website?: string;
+  linkedinUrl?: string;
+  githubUrl?: string;
+  experiences?: Experience[];
+  education?: Education[];
+  skills?: string[];
+  projects?: Project[];
+  certifications?: Certification[];
+  languages?: Language[];
+  isPublic?: boolean;
+}
+
+export interface UpdateResumeRequest {
+  fullName?: string;
+  title?: string;
+  summary?: string;
+  email?: string;
+  phone?: string;
+  location?: string;
+  website?: string;
+  linkedinUrl?: string;
+  githubUrl?: string;
+  experiences?: Experience[];
+  education?: Education[];
+  skills?: string[];
+  projects?: Project[];
+  certifications?: Certification[];
+  languages?: Language[];
+  isPublic?: boolean;
+}
