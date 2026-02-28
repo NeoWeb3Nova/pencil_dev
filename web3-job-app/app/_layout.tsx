@@ -74,6 +74,13 @@ function RootLayoutNav() {
                 headerBackTitle: t('back', language),
               }}
             />
+            <Stack.Screen
+              name="login"
+              options={{
+                title: t('login', language),
+                headerBackTitle: t('back', language),
+              }}
+            />
           </Stack>
         </View>
       </ThemeProvider>

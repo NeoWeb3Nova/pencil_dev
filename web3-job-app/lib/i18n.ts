@@ -78,6 +78,33 @@ export const translations = {
     // 个人中心
     profileTitle: '我的',
     profileHeader: '个人中心',
+
+    // 登录/注册
+    welcome: '欢迎',
+    loginToContinue: '登录以继续',
+    loginToExplore: '登录以探索更多机会',
+    login: '登录',
+    loginSuccess: '登录成功',
+    loginFailed: '登录失败',
+    loginError: '登录时出错',
+    welcomeBack: '欢迎回来',
+    register: '注册',
+    noAccount: '还没有账号？',
+    hasAccount: '已有账号？',
+    toLogin: '去登录',
+    logout: '登出',
+    email: '邮箱',
+    emailPlaceholder: '请输入邮箱地址',
+    password: '密码',
+    passwordPlaceholder: '请输入密码',
+    forgotPassword: '忘记密码？',
+    postJobs: '发布职位',
+    postJobsDesc: '发布职位，吸引优秀人才',
+    messaging: '消息沟通',
+    messagingDesc: '与候选人直接沟通',
+    notifications: '消息通知',
+    notificationsDesc: '获取最新的职位通知',
+    resumeDesc: '管理您的在线简历',
   },
   en: {
     // Profile
@@ -157,12 +184,46 @@ export const translations = {
     // Profile
     profileTitle: 'Profile',
     profileHeader: 'Profile',
+
+    // Login/Register
+    welcome: 'Welcome',
+    loginToContinue: 'Login to continue',
+    loginToExplore: 'Login to explore more opportunities',
+    login: 'Login',
+    loginSuccess: 'Login Successful',
+    loginFailed: 'Login Failed',
+    loginError: 'An error occurred during login',
+    welcomeBack: 'Welcome back',
+    register: 'Register',
+    noAccount: 'Don\'t have an account?',
+    hasAccount: 'Already have an account?',
+    toLogin: 'Login',
+    logout: 'Logout',
+    email: 'Email',
+    emailPlaceholder: 'Enter your email',
+    password: 'Password',
+    passwordPlaceholder: 'Enter your password',
+    forgotPassword: 'Forgot password?',
+    postJobs: 'Post Jobs',
+    postJobsDesc: 'Post jobs to attract talent',
+    messaging: 'Messaging',
+    messagingDesc: 'Communicate with candidates directly',
+    notifications: 'Notifications',
+    notificationsDesc: 'Get the latest job notifications',
+    resumeDesc: 'Manage your online resume',
   },
 };
 
 export type Language = 'zh' | 'en';
-export type TranslationKey = keyof typeof translations.zh;
+
+// 获取所有翻译键的联合类型
+export type TranslationKey = keyof typeof translations.zh |
+  'email' | 'emailPlaceholder' | 'password' | 'passwordPlaceholder' |
+  'forgotPassword' | 'loginSuccess' | 'loginFailed' | 'loginError' |
+  'welcomeBack' | 'loginToExplore' | 'postJobs' | 'postJobsDesc' |
+  'messaging' | 'messagingDesc' | 'notifications' | 'notificationsDesc' |
+  'resumeDesc';
 
 export function t(key: TranslationKey, lang: Language): string {
-  return translations[lang][key] || translations.zh[key] || key;
+  return (translations[lang] as any)[key] || translations.zh[key as keyof typeof translations.zh] || key;
 }

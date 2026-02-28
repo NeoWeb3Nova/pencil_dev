@@ -26,6 +26,10 @@ export const colors = {
   gray700: '#3F3F46',
   gray800: '#27272A',
   gray900: '#18181B',
+  // 语义化颜色
+  danger: '#EF4444',
+  warning: '#F59E0B',
+  success: '#10B981',
 };
 
 // 深色模式颜色映射

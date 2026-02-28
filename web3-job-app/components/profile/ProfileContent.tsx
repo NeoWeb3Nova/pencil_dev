@@ -1,19 +1,19 @@
 import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
-import { UserProfile } from '@/types';
 import { useThemedColors } from '@/lib/useThemedColors';
 import { Card } from '@/components/ui/Card';
+import { useAuthStore } from '@/store/authStore';
 import { useAppStore } from '@/store/app-store';
 import { t } from '@/lib/i18n';
 import { ThemeToggle } from '@/components/profile/ThemeToggle';
 
 interface ProfileContentProps {
-  profile: UserProfile;
   onMenuItemPress?: (item: string) => void;
 }
 
-export function ProfileContent({ profile, onMenuItemPress }: ProfileContentProps) {
+export function ProfileContent({ onMenuItemPress }: ProfileContentProps) {
   const { language } = useAppStore();
+  const { user } = useAuthStore();
   const colors = useThemedColors();
 
   const menuItems1 = [
@@ -25,6 +25,7 @@ export function ProfileContent({ profile, onMenuItemPress }: ProfileContentProps
   const menuItems2 = [
     { id: 'language', label: t('language', language), value: language === 'zh' ? '中文' : 'English', icon: '🌍' },
     { id: 'analytics', label: t('analytics', language), icon: '📊' },
+    { id: 'logout', label: t('logout', language), icon: '🚪' },
   ];
 
   return (
@@ -64,7 +65,7 @@ export function ProfileContent({ profile, onMenuItemPress }: ProfileContentProps
             marginBottom: 4,
           }}
         >
-          {profile.name}
+          {user?.name || 'User'}
         </Text>
         <Text
           style={{
@@ -72,7 +73,7 @@ export function ProfileContent({ profile, onMenuItemPress }: ProfileContentProps
             color: colors.secondary,
           }}
         >
-          {profile.email}
+          {user?.email || ''}
         </Text>
       </Card>
 
@@ -100,7 +101,7 @@ export function ProfileContent({ profile, onMenuItemPress }: ProfileContentProps
               marginBottom: 4,
             }}
           >
-            {profile.stats.applied}
+            {user?.stats?.applied || 0}
           </Text>
           <Text
             style={{
@@ -126,7 +127,7 @@ export function ProfileContent({ profile, onMenuItemPress }: ProfileContentProps
               marginBottom: 4,
             }}
           >
-            {profile.stats.interviews}
+            {user?.stats?.interviews || 0}
           </Text>
           <Text
             style={{
@@ -152,7 +153,7 @@ export function ProfileContent({ profile, onMenuItemPress }: ProfileContentProps
               marginBottom: 4,
             }}
           >
-            {profile.stats.offers}
+            {user?.stats?.offers || 0}
           </Text>
           <Text
             style={{
