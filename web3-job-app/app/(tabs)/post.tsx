@@ -14,8 +14,8 @@ export default function PostJobScreen() {
 
   React.useEffect(() => {
     // 检查用户是否已登录
-    const checkAuth = () => {
-      const loggedIn = isLoggedIn();
+    const checkAuth = async () => {
+      const loggedIn = await isLoggedIn();
       setIsAuthenticated(loggedIn);
       setIsCheckingAuth(false);
 
@@ -31,7 +31,7 @@ export default function PostJobScreen() {
             },
             {
               text: '去登录',
-              onPress: () => router.push('/profile'),
+              onPress: () => router.push('/login'),
             },
           ]
         );
@@ -58,7 +58,7 @@ export default function PostJobScreen() {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: themedColors.background }}>
         <Text style={{ color: themedColors.dark, marginBottom: 16 }}>请先登录以发布职位</Text>
-        <Button onPress={() => router.push('/profile')} size="lg">
+        <Button onPress={() => router.push('/login')} size="lg">
           去登录
         </Button>
       </View>

@@ -78,6 +78,20 @@ export const translations = {
     // 个人中心
     profileTitle: '我的',
     profileHeader: '个人中心',
+
+    // 登录相关
+    welcome: '欢迎',
+    loginToContinue: '登录以继续访问您的账户',
+    login: '登录',
+    register: '注册',
+    noAccount: '还没有账号？',
+    postJobs: '发布职位',
+    postJobsDesc: '向全球人才展示您的职位',
+    messaging: '消息通信',
+    messagingDesc: '直接与招聘者或求职者沟通',
+    myResumeDesc: '创建和管理您的专业简历',
+    notifications: '通知',
+    notificationsDesc: '及时了解申请状态更新',
   },
   en: {
     // Profile
@@ -157,12 +171,26 @@ export const translations = {
     // Profile
     profileTitle: 'Profile',
     profileHeader: 'Profile',
+
+    // Login related
+    welcome: 'Welcome',
+    loginToContinue: 'Login to access your account',
+    login: 'Login',
+    register: 'Register',
+    noAccount: "Don't have an account?",
+    postJobs: 'Post Jobs',
+    postJobsDesc: 'Show your jobs to global talents',
+    messaging: 'Messaging',
+    messagingDesc: 'Communicate with recruiters or candidates',
+    myResumeDesc: 'Create and manage your professional resume',
+    notifications: 'Notifications',
+    notificationsDesc: 'Stay updated with application status',
   },
 };
 
 export type Language = 'zh' | 'en';
-export type TranslationKey = keyof typeof translations.zh;
+export type TranslationKey = keyof (typeof translations.zh);
 
-export function t(key: TranslationKey, lang: Language): string {
-  return translations[lang][key] || translations.zh[key] || key;
+export function t(key: string, lang: Language): string {
+  return translations[lang][key as keyof typeof translations.zh] || translations.zh[key as keyof typeof translations.zh] || key;
 }

@@ -1,11 +1,8 @@
 import { create } from 'zustand';
 import { getStoredLanguage, saveLanguagePreference, getStoredTheme, saveThemePreference } from '@/lib/storage';
+import { useAuthStore } from './authStore';
 
 interface AppState {
-  // 用户相关
-  isLoggedIn: boolean;
-  userId: string | null;
-
   // 搜索相关
   searchQuery: string;
   selectedCategory: string;
@@ -17,8 +14,6 @@ interface AppState {
   themeMode: 'light' | 'dark';
 
   // 动作
-  login: () => void;
-  logout: () => void;
   setSearchQuery: (query: string) => void;
   setSelectedCategory: (category: string) => void;
   setLanguage: (language: 'zh' | 'en') => void;
@@ -29,16 +24,13 @@ interface AppState {
   saveTheme: (theme: 'light' | 'dark') => Promise<void>;
 }
 
+// 使用订阅模式从 authStore 获取登录状态
 export const useAppStore = create<AppState>((set, get) => ({
-  isLoggedIn: false,
-  userId: null,
   searchQuery: '',
   selectedCategory: '',
   language: 'zh',
   themeMode: 'light',
 
-  login: () => set({ isLoggedIn: true, userId: 'user-1' }),
-  logout: () => set({ isLoggedIn: false, userId: null }),
   setSearchQuery: (query: string) => set({ searchQuery: query }),
   setSelectedCategory: (category: string) => set({ selectedCategory: category }),
   setLanguage: (language: 'zh' | 'en') => set({ language }),
@@ -67,3 +59,19 @@ export const useAppStore = create<AppState>((set, get) => ({
     await saveThemePreference(theme);
   },
 }));
+
+// 导出一个辅助 hook 用于获取认证状态
+export const useAuth = () => {
+  const { isLoggedIn, user, isLoading, error, login, logout, initializeAuth, refreshProfile, clearError } = useAuthStore();
+  return {
+    isLoggedIn,
+    user,
+    isLoading,
+    error,
+    login,
+    logout,
+    initializeAuth,
+    refreshProfile,
+    clearError,
+  };
+};

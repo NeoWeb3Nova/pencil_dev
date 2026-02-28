@@ -2,6 +2,7 @@
 // 后端地址：http://localhost:3000/api
 // Android 模拟器使用 10.0.2.2 访问主机，iOS 模拟器使用 localhost
 
+import * as SecureStore from 'expo-secure-store';
 import {
   Job,
   Message,
@@ -22,31 +23,29 @@ import {
 const API_BASE_URL = 'http://10.0.2.2:3000/api';
 
 // 获取存储的 token
-const getToken = (): string | null => {
-  // 在 React Native 中，可以使用 AsyncStorage
-  // 这里使用简单实现，实际项目中请使用 AsyncStorage
+const getToken = async (): Promise<string | null> => {
   try {
-    return localStorage.getItem('@web3job:token');
+    return await SecureStore.getItemAsync('@web3job:token');
   } catch {
     return null;
   }
 };
 
 // 存储 token
-const setToken = (token: string): void => {
+const setToken = async (token: string): Promise<void> => {
   try {
-    localStorage.setItem('@web3job:token', token);
+    await SecureStore.setItemAsync('@web3job:token', token);
   } catch {
-    // React Native 中使用 AsyncStorage
+    // ignore
   }
 };
 
 // 清除 token
-const clearToken = (): void => {
+const clearToken = async (): Promise<void> => {
   try {
-    localStorage.removeItem('@web3job:token');
+    await SecureStore.deleteItemAsync('@web3job:token');
   } catch {
-    // React Native 中使用 AsyncStorage
+    // ignore
   }
 };
 
@@ -67,7 +66,7 @@ async function handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
 
 // 带认证的请求
 async function fetchWithAuth(url: string, options: RequestInit = {}): Promise<Response> {
-  const token = getToken();
+  const token = await getToken();
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
     ...options.headers,
@@ -97,7 +96,7 @@ export async function login(data: LoginRequest): Promise<ApiResponse<AuthRespons
     const result = await handleResponse<AuthResponse>(response);
 
     if (result.success && result.data) {
-      setToken(result.data.access_token);
+      await setToken(result.data.access_token);
     }
 
     return result;
@@ -122,7 +121,7 @@ export async function register(data: RegisterRequest): Promise<ApiResponse<AuthR
     const result = await handleResponse<AuthResponse>(response);
 
     if (result.success && result.data) {
-      setToken(result.data.access_token);
+      await setToken(result.data.access_token);
     }
 
     return result;
@@ -137,7 +136,7 @@ export async function register(data: RegisterRequest): Promise<ApiResponse<AuthR
 
 // 登出
 export async function logout(): Promise<void> {
-  clearToken();
+  await clearToken();
 }
 
 // 获取用户资料
@@ -431,12 +430,13 @@ export async function markMessageAsRead(id: string): Promise<ApiResponse<null>> 
 // ==================== 工具函数 ====================
 
 // 检查是否已登录
-export function isLoggedIn(): boolean {
-  return getToken() !== null;
+export async function isLoggedIn(): Promise<boolean> {
+  const token = await getToken();
+  return token !== null;
 }
 
 // 获取当前 token
-export function getCurrentToken(): string | null {
+export async function getCurrentToken(): Promise<string | null> {
   return getToken();
 }
 
