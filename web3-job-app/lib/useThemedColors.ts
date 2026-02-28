@@ -34,9 +34,6 @@ export function useThemedColors() {
     muted: colors.muted,
     dark: colors.dark,
     white: colors.white,
-    danger: colors.danger,
-    warning: colors.warning,
-    success: colors.success,
 
     // Gray 系列
     gray100: colors.gray100,

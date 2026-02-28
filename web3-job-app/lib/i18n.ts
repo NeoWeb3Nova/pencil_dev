@@ -79,19 +79,32 @@ export const translations = {
     profileTitle: '我的',
     profileHeader: '个人中心',
 
-    // 登录相关
+    // 登录/注册
     welcome: '欢迎',
-    loginToContinue: '登录以继续访问您的账户',
+    loginToContinue: '登录以继续',
+    loginToExplore: '登录以探索更多机会',
     login: '登录',
+    loginSuccess: '登录成功',
+    loginFailed: '登录失败',
+    loginError: '登录时出错',
+    welcomeBack: '欢迎回来',
     register: '注册',
     noAccount: '还没有账号？',
+    hasAccount: '已有账号？',
+    toLogin: '去登录',
+    logout: '登出',
+    email: '邮箱',
+    emailPlaceholder: '请输入邮箱地址',
+    password: '密码',
+    passwordPlaceholder: '请输入密码',
+    forgotPassword: '忘记密码？',
     postJobs: '发布职位',
-    postJobsDesc: '向全球人才展示您的职位',
-    messaging: '消息通信',
-    messagingDesc: '直接与招聘者或求职者沟通',
-    myResumeDesc: '创建和管理您的专业简历',
-    notifications: '通知',
-    notificationsDesc: '及时了解申请状态更新',
+    postJobsDesc: '发布职位，吸引优秀人才',
+    messaging: '消息沟通',
+    messagingDesc: '与候选人直接沟通',
+    notifications: '消息通知',
+    notificationsDesc: '获取最新的职位通知',
+    resumeDesc: '管理您的在线简历',
   },
   en: {
     // Profile
@@ -172,25 +185,45 @@ export const translations = {
     profileTitle: 'Profile',
     profileHeader: 'Profile',
 
-    // Login related
+    // Login/Register
     welcome: 'Welcome',
-    loginToContinue: 'Login to access your account',
+    loginToContinue: 'Login to continue',
+    loginToExplore: 'Login to explore more opportunities',
     login: 'Login',
+    loginSuccess: 'Login Successful',
+    loginFailed: 'Login Failed',
+    loginError: 'An error occurred during login',
+    welcomeBack: 'Welcome back',
     register: 'Register',
-    noAccount: "Don't have an account?",
+    noAccount: 'Don\'t have an account?',
+    hasAccount: 'Already have an account?',
+    toLogin: 'Login',
+    logout: 'Logout',
+    email: 'Email',
+    emailPlaceholder: 'Enter your email',
+    password: 'Password',
+    passwordPlaceholder: 'Enter your password',
+    forgotPassword: 'Forgot password?',
     postJobs: 'Post Jobs',
-    postJobsDesc: 'Show your jobs to global talents',
+    postJobsDesc: 'Post jobs to attract talent',
     messaging: 'Messaging',
-    messagingDesc: 'Communicate with recruiters or candidates',
-    myResumeDesc: 'Create and manage your professional resume',
+    messagingDesc: 'Communicate with candidates directly',
     notifications: 'Notifications',
-    notificationsDesc: 'Stay updated with application status',
+    notificationsDesc: 'Get the latest job notifications',
+    resumeDesc: 'Manage your online resume',
   },
 };
 
 export type Language = 'zh' | 'en';
-export type TranslationKey = keyof (typeof translations.zh);
 
-export function t(key: string, lang: Language): string {
-  return translations[lang][key as keyof typeof translations.zh] || translations.zh[key as keyof typeof translations.zh] || key;
+// 获取所有翻译键的联合类型
+export type TranslationKey = keyof typeof translations.zh |
+  'email' | 'emailPlaceholder' | 'password' | 'passwordPlaceholder' |
+  'forgotPassword' | 'loginSuccess' | 'loginFailed' | 'loginError' |
+  'welcomeBack' | 'loginToExplore' | 'postJobs' | 'postJobsDesc' |
+  'messaging' | 'messagingDesc' | 'notifications' | 'notificationsDesc' |
+  'resumeDesc';
+
+export function t(key: TranslationKey, lang: Language): string {
+  return (translations[lang] as any)[key] || translations.zh[key as keyof typeof translations.zh] || key;
 }

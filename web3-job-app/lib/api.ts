@@ -1,6 +1,5 @@
 // API 服务 - 连接真实后端 API
 // 后端地址：http://localhost:3000/api
-// Android 模拟器使用 10.0.2.2 访问主机，iOS 模拟器使用 localhost
 
 import * as SecureStore from 'expo-secure-store';
 import {
@@ -13,14 +12,10 @@ import {
   AuthResponse,
   CreateApplicationRequest,
   Application,
-  Resume,
-  CreateResumeRequest,
-  UpdateResumeRequest,
   CreateJobRequest,
 } from '@/types';
 
-// Android 模拟器：10.0.2.2, iOS 模拟器和 Web: localhost
-const API_BASE_URL = 'http://10.0.2.2:3000/api';
+const API_BASE_URL = 'http://localhost:3000/api';
 
 // 获取存储的 token
 const getToken = async (): Promise<string | null> => {
@@ -36,7 +31,7 @@ const setToken = async (token: string): Promise<void> => {
   try {
     await SecureStore.setItemAsync('@web3job:token', token);
   } catch {
-    // ignore
+    // 处理错误
   }
 };
 
@@ -45,7 +40,7 @@ const clearToken = async (): Promise<void> => {
   try {
     await SecureStore.deleteItemAsync('@web3job:token');
   } catch {
-    // ignore
+    // 处理错误
   }
 };
 
@@ -437,89 +432,5 @@ export async function isLoggedIn(): Promise<boolean> {
 
 // 获取当前 token
 export async function getCurrentToken(): Promise<string | null> {
-  return getToken();
-}
-
-// ==================== 简历相关 ====================
-
-// 获取我的简历
-export async function getMyResume(): Promise<ApiResponse<Resume>> {
-  try {
-    const response = await fetchWithAuth(`${API_BASE_URL}/resumes`);
-    return await handleResponse(response);
-  } catch (error) {
-    return {
-      success: false,
-      data: null,
-      error: 'Network error',
-    };
-  }
-}
-
-// 创建简历
-export async function createResume(
-  data: CreateResumeRequest
-): Promise<ApiResponse<Resume>> {
-  try {
-    const response = await fetchWithAuth(`${API_BASE_URL}/resumes`, {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
-    return await handleResponse(response);
-  } catch (error) {
-    return {
-      success: false,
-      data: null,
-      error: 'Network error',
-    };
-  }
-}
-
-// 更新简历
-export async function updateResume(
-  data: UpdateResumeRequest
-): Promise<ApiResponse<Resume>> {
-  try {
-    const response = await fetchWithAuth(`${API_BASE_URL}/resumes`, {
-      method: 'PUT',
-      body: JSON.stringify(data),
-    });
-    return await handleResponse(response);
-  } catch (error) {
-    return {
-      success: false,
-      data: null,
-      error: 'Network error',
-    };
-  }
-}
-
-// 删除简历
-export async function deleteResume(): Promise<ApiResponse<null>> {
-  try {
-    const response = await fetchWithAuth(`${API_BASE_URL}/resumes`, {
-      method: 'DELETE',
-    });
-    return await handleResponse(response);
-  } catch (error) {
-    return {
-      success: false,
-      data: null,
-      error: 'Network error',
-    };
-  }
-}
-
-// 获取公开简历
-export async function getPublicResume(userId: string): Promise<ApiResponse<Resume>> {
-  try {
-    const response = await fetch(`${API_BASE_URL}/resumes/public/${userId}`);
-    return await handleResponse(response);
-  } catch (error) {
-    return {
-      success: false,
-      data: null,
-      error: 'Network error',
-    };
-  }
+  return await getToken();
 }

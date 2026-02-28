@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { getStoredLanguage, saveLanguagePreference, getStoredTheme, saveThemePreference } from '@/lib/storage';
-import { useAuthStore } from './authStore';
 
 interface AppState {
   // 搜索相关
@@ -24,13 +23,11 @@ interface AppState {
   saveTheme: (theme: 'light' | 'dark') => Promise<void>;
 }
 
-// 使用订阅模式从 authStore 获取登录状态
 export const useAppStore = create<AppState>((set, get) => ({
   searchQuery: '',
   selectedCategory: '',
   language: 'zh',
   themeMode: 'light',
-
   setSearchQuery: (query: string) => set({ searchQuery: query }),
   setSelectedCategory: (category: string) => set({ selectedCategory: category }),
   setLanguage: (language: 'zh' | 'en') => set({ language }),
@@ -60,18 +57,5 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 }));
 
-// 导出一个辅助 hook 用于获取认证状态
-export const useAuth = () => {
-  const { isLoggedIn, user, isLoading, error, login, logout, initializeAuth, refreshProfile, clearError } = useAuthStore();
-  return {
-    isLoggedIn,
-    user,
-    isLoading,
-    error,
-    login,
-    logout,
-    initializeAuth,
-    refreshProfile,
-    clearError,
-  };
-};
+// 辅助 hook - 导出 useAuth 供外部使用
+export { useAuth } from './authStore';

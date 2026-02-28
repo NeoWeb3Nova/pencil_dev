@@ -1,250 +1,194 @@
 import React, { useState } from 'react';
 import {
-  StyleSheet,
   View,
   Text,
   TextInput,
   TouchableOpacity,
+  StyleSheet,
+  Alert,
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  Alert,
 } from 'react-native';
-import { useRouter } from 'expo-router';
-import { useThemedColors } from '@/lib/useThemedColors';
+import { router } from 'expo-router';
 import { useAuthStore } from '@/store/authStore';
+import { useThemedColors } from '@/lib/useThemedColors';
 import { t } from '@/lib/i18n';
+import type { LoginRequest } from '@/types';
 
 export default function LoginScreen() {
-  const router = useRouter();
   const colors = useThemedColors();
-  const { login, isLoading, error, clearError } = useAuthStore();
+  const { login, isLoading } = useAuthStore();
+  const [language, setLanguage] = useState<'zh' | 'en'>('zh');
 
+  // 表单状态
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
+  const [errors, setErrors] = useState<Partial<LoginRequest>>({});
 
-  // 验证邮箱格式
-  const validateEmail = (text: string): boolean => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!text) {
-      setEmailError('请输入邮箱');
-      return false;
-    }
-    if (!emailRegex.test(text)) {
-      setEmailError('请输入有效的邮箱地址');
-      return false;
-    }
-    setEmailError('');
-    return true;
-  };
+  // 验证表单
+  const validateForm = (): boolean => {
+    const newErrors: Partial<LoginRequest> = {};
 
-  // 验证密码
-  const validatePassword = (text: string): boolean => {
-    if (!text) {
-      setPasswordError('请输入密码');
-      return false;
+    if (!email.trim()) {
+      newErrors.email = language === 'zh' ? '邮箱不能为空' : 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = language === 'zh' ? '请输入有效的邮箱地址' : 'Please enter a valid email';
     }
-    if (text.length < 6) {
-      setPasswordError('密码至少需要 6 位');
-      return false;
+
+    if (!password) {
+      newErrors.password = language === 'zh' ? '密码不能为空' : 'Password is required';
+    } else if (password.length < 6) {
+      newErrors.password = language === 'zh' ? '密码至少 6 位' : 'Password must be at least 6 characters';
     }
-    setPasswordError('');
-    return true;
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   // 处理登录
   const handleLogin = async () => {
-    clearError();
-
-    // 验证表单
-    const isEmailValid = validateEmail(email);
-    const isPasswordValid = validatePassword(password);
-
-    if (!isEmailValid || !isPasswordValid) {
+    if (!validateForm()) {
       return;
     }
 
     const result = await login({ email, password });
 
     if (result.success) {
-      // 登录成功，返回上一页或首页
-      Alert.alert('登录成功', '欢迎回来！', [
-        {
-          text: '确定',
-          onPress: () => {
-            router.back();
-          },
-        },
-      ]);
+      Alert.alert(
+        t('loginSuccess', language),
+        t('welcomeBack', language),
+        [{ text: 'OK', onPress: () => router.back() }]
+      );
     } else {
-      Alert.alert('登录失败', result.error || '登录失败，请检查您的账号密码');
-    }
-  };
-
-  // 处理邮箱输入变化
-  const handleEmailChange = (text: string) => {
-    setEmail(text);
-    if (emailError) {
-      validateEmail(text);
-    }
-  };
-
-  // 处理密码输入变化
-  const handlePasswordChange = (text: string) => {
-    setPassword(text);
-    if (passwordError) {
-      validatePassword(text);
+      Alert.alert(t('loginFailed', language), result.error || t('loginError', language));
     }
   };
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={{ flex: 1 }}
+      style={[styles.container, { backgroundColor: colors.background }]}
     >
       <ScrollView
-        contentContainerStyle={[
-          styles.container,
-          { backgroundColor: colors.background },
-        ]}
+        contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
       >
-        {/* Logo/标题区域 */}
-        <View style={[styles.header, { marginTop: 60 }]}>
-          <View
-            style={[
-              styles.logoPlaceholder,
-              { backgroundColor: colors.primary },
-            ]}
-          >
+        {/* Header */}
+        <View style={styles.header}>
+          <View style={[styles.logoContainer, { backgroundColor: colors.primary }]}>
             <Text style={styles.logoText}>🔐</Text>
           </View>
           <Text style={[styles.title, { color: colors.dark }]}>
-            登录 Web3 Job
+            {t('welcome', language)}
           </Text>
           <Text style={[styles.subtitle, { color: colors.secondary }]}>
-            登录以继续访问您的账户
+            {t('loginToContinue', language)}
           </Text>
         </View>
 
-        {/* 登录表单 */}
+        {/* Form */}
         <View style={styles.form}>
-          {/* 邮箱输入框 */}
-          <View style={styles.inputContainer}>
-            <Text style={[styles.label, { color: colors.dark }]}>邮箱</Text>
+          {/* Email Input */}
+          <View style={styles.inputGroup}>
+            <Text style={[styles.label, { color: colors.dark }]}>
+              {t('email', language)}
+            </Text>
             <TextInput
               style={[
                 styles.input,
                 {
-                  backgroundColor: colors.white,
-                  borderColor: emailError ? colors.danger : colors.gray200,
+                  backgroundColor: colors.background,
+                  borderColor: errors.email ? colors.danger : colors.gray300,
                   color: colors.dark,
                 },
               ]}
-              placeholder="请输入邮箱"
+              placeholder={t('emailPlaceholder', language)}
               placeholderTextColor={colors.secondary}
               value={email}
-              onChangeText={handleEmailChange}
-              onBlur={() => validateEmail(email)}
-              keyboardType="email-address"
+              onChangeText={setEmail}
               autoCapitalize="none"
               autoCorrect={false}
+              keyboardType="email-address"
               editable={!isLoading}
             />
-            {emailError ? (
-              <Text style={[styles.errorText, { color: colors.danger }]}>
-                {emailError}
-              </Text>
-            ) : null}
+            {errors.email && (
+              <Text style={[styles.errorText, { color: colors.danger }]}>{errors.email}</Text>
+            )}
           </View>
 
-          {/* 密码输入框 */}
-          <View style={styles.inputContainer}>
-            <Text style={[styles.label, { color: colors.dark }]}>密码</Text>
+          {/* Password Input */}
+          <View style={styles.inputGroup}>
+            <Text style={[styles.label, { color: colors.dark }]}>
+              {t('password', language)}
+            </Text>
             <View
               style={[
                 styles.passwordContainer,
                 {
-                  backgroundColor: colors.white,
-                  borderColor: passwordError ? colors.danger : colors.gray200,
+                  backgroundColor: colors.background,
+                  borderColor: errors.password ? colors.danger : colors.gray300,
                 },
               ]}
             >
               <TextInput
-                style={[
-                  styles.passwordInput,
-                  { color: colors.dark },
-                ]}
-                placeholder="请输入密码"
+                style={[styles.passwordInput, { color: colors.dark }]}
+                placeholder={t('passwordPlaceholder', language)}
                 placeholderTextColor={colors.secondary}
                 value={password}
-                onChangeText={handlePasswordChange}
-                onBlur={() => validatePassword(password)}
+                onChangeText={setPassword}
                 secureTextEntry={!showPassword}
                 editable={!isLoading}
               />
               <TouchableOpacity
                 onPress={() => setShowPassword(!showPassword)}
-                disabled={isLoading}
-                style={styles.showPasswordButton}
+                style={styles.toggleButton}
               >
-                <Text style={{ fontSize: 14 }}>
-                  {showPassword ? '👁️' : '👁️‍🗨️'}
+                <Text style={[styles.toggleButtonText, { color: colors.secondary }]}>
+                  {showPassword ? '🙈' : '👁️'}
                 </Text>
               </TouchableOpacity>
             </View>
-            {passwordError ? (
-              <Text style={[styles.errorText, { color: colors.danger }]}>
-                {passwordError}
-              </Text>
-            ) : null}
+            {errors.password && (
+              <Text style={[styles.errorText, { color: colors.danger }]}>{errors.password}</Text>
+            )}
           </View>
 
-          {/* 通用错误提示 */}
-          {error ? (
-            <View
-              style={[
-                styles.errorContainer,
-                { backgroundColor: `${colors.danger}15` },
-              ]}
-            >
-              <Text style={[styles.errorText, { color: colors.danger }]}>
-                {error}
-              </Text>
-            </View>
-          ) : null}
+          {/* Forgot Password */}
+          <TouchableOpacity style={styles.forgotPassword}>
+            <Text style={[styles.forgotPasswordText, { color: colors.primary }]}>
+              {t('forgotPassword', language)}
+            </Text>
+          </TouchableOpacity>
 
-          {/* 登录按钮 */}
+          {/* Login Button */}
           <TouchableOpacity
             style={[
               styles.loginButton,
               {
-                backgroundColor: isLoading ? colors.gray200 : colors.primary,
+                backgroundColor: isLoading ? colors.gray300 : colors.primary,
               },
             ]}
             onPress={handleLogin}
             disabled={isLoading}
           >
             {isLoading ? (
-              <ActivityIndicator color={colors.white} />
+              <ActivityIndicator color="#fff" />
             ) : (
-              <Text style={styles.loginButtonText}>登录</Text>
+              <Text style={styles.loginButtonText}>{t('login', language)}</Text>
             )}
           </TouchableOpacity>
 
-          {/* 其他选项 */}
-          <View style={styles.footer}>
-            <Text style={{ color: colors.secondary, fontSize: 14 }}>
-              还没有账号？
+          {/* Register Link */}
+          <View style={styles.registerContainer}>
+            <Text style={[styles.registerText, { color: colors.secondary }]}>
+              {t('noAccount', language)}{' '}
             </Text>
             <TouchableOpacity onPress={() => Alert.alert('敬请期待', '注册功能即将上线')}>
-              <Text style={{ color: colors.primary, fontSize: 14, fontWeight: '600' }}>
-                立即注册
+              <Text style={[styles.registerLink, { color: colors.primary }]}>
+                {t('register', language)}
               </Text>
             </TouchableOpacity>
           </View>
@@ -256,22 +200,25 @@ export default function LoginScreen() {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+  },
+  scrollContent: {
     flexGrow: 1,
-    paddingHorizontal: 24,
-    paddingTop: 20,
-    paddingBottom: 40,
+    justifyContent: 'center',
+    paddingVertical: 24,
   },
   header: {
     alignItems: 'center',
-    marginBottom: 40,
+    marginBottom: 32,
+    paddingHorizontal: 24,
   },
-  logoPlaceholder: {
+  logoContainer: {
     width: 80,
     height: 80,
     borderRadius: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 16,
   },
   logoText: {
     fontSize: 36,
@@ -286,10 +233,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   form: {
-    flex: 1,
-    justifyContent: 'center',
+    paddingHorizontal: 24,
   },
-  inputContainer: {
+  inputGroup: {
     marginBottom: 20,
   },
   label: {
@@ -299,53 +245,62 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderRadius: 12,
+    borderRadius: 8,
     paddingHorizontal: 16,
-    paddingVertical: 14,
+    paddingVertical: 12,
     fontSize: 16,
-    height: 50,
   },
   passwordContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderRadius: 12,
+    borderRadius: 8,
     paddingHorizontal: 16,
-    height: 50,
   },
   passwordInput: {
     flex: 1,
+    paddingVertical: 12,
     fontSize: 16,
-    paddingVertical: 0,
   },
-  showPasswordButton: {
+  toggleButton: {
     padding: 4,
+  },
+  toggleButtonText: {
+    fontSize: 18,
+  },
+  forgotPassword: {
+    alignItems: 'flex-end',
+    marginBottom: 24,
+  },
+  forgotPasswordText: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  loginButton: {
+    borderRadius: 8,
+    paddingVertical: 14,
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  loginButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  registerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 8,
+  },
+  registerText: {
+    fontSize: 14,
+  },
+  registerLink: {
+    fontSize: 14,
+    fontWeight: '600',
   },
   errorText: {
     fontSize: 12,
     marginTop: 4,
-  },
-  errorContainer: {
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 16,
-  },
-  loginButton: {
-    borderRadius: 12,
-    paddingVertical: 16,
-    alignItems: 'center',
-    marginTop: 8,
-    marginBottom: 24,
-  },
-  loginButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 8,
-    alignItems: 'center',
   },
 });
