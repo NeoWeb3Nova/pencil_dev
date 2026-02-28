@@ -30,6 +30,19 @@ export default function JobsScreen() {
     { id: 'nft', label: t('categoryNFT', language) },
   ];
 
+  // Format date helper
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 0) return t('today', language);
+    if (diffDays === 1) return t('yesterday', language);
+    if (diffDays < 7) return `${diffDays}${t('daysAgo', language)}`;
+    return date.toLocaleDateString(language === 'zh' ? 'zh-CN' : 'en-US');
+  };
+
   // Use React Query to fetch jobs from real API
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['jobs', selectedCategory],
@@ -54,19 +67,6 @@ export default function JobsScreen() {
       }));
     },
   });
-
-  // Format date helper
-  const formatDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-    if (diffDays === 0) return t('today', language);
-    if (diffDays === 1) return t('yesterday', language);
-    if (diffDays < 7) return `${diffDays}${t('daysAgo', language)}`;
-    return date.toLocaleDateString(language === 'zh' ? 'zh-CN' : 'en-US');
-  };
 
   // Filter jobs by category
   const filterJobsByCategory = (jobs: Job[]) => {

@@ -1,7 +1,8 @@
 // API 服务 - 连接真实后端 API
-// 后端地址：http://localhost:3000/api
+// 后端地址根据平台自动配置
 
 import * as SecureStore from 'expo-secure-store';
+import { Platform } from 'react-native';
 import {
   Job,
   Message,
@@ -15,7 +16,23 @@ import {
   CreateJobRequest,
 } from '@/types';
 
-const API_BASE_URL = 'http://localhost:3000/api';
+// 根据平台自动选择正确的 API 地址
+// - Web: localhost
+// - Android 模拟器：10.0.2.2 (访问宿主机)
+// - iOS 模拟器：localhost
+const getApiBaseUrl = () => {
+  if (process.env.EXPO_PUBLIC_API_URL) {
+    return process.env.EXPO_PUBLIC_API_URL;
+  }
+
+  if (Platform.OS === 'android') {
+    return 'http://10.0.2.2:3000/api';
+  }
+
+  return 'http://localhost:3000/api';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 // 获取存储的 token
 const getToken = async (): Promise<string | null> => {
