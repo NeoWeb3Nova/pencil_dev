@@ -5,6 +5,7 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
+import { View } from 'react-native';
 import 'react-native-reanimated';
 import { useAppStore } from '@/store/app-store';
 import { t } from '@/lib/i18n';
@@ -63,16 +64,18 @@ function RootLayoutNav() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider value={themeMode === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="job/[id]"
-            options={{
-              title: t('jobDetails', language),
-              headerBackTitle: t('back', language),
-            }}
-          />
-        </Stack>
+        <View className={themeMode === 'dark' ? 'dark' : ''} style={{ flex: 1 }}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="job/[id]"
+              options={{
+                title: t('jobDetails', language),
+                headerBackTitle: t('back', language),
+              }}
+            />
+          </Stack>
+        </View>
       </ThemeProvider>
     </QueryClientProvider>
   );

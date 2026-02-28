@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { Job } from '@/types';
-import { colors } from '@/lib/constants';
+import { useThemedColors } from '@/lib/useThemedColors';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 
@@ -11,24 +11,99 @@ interface JobCardProps {
 }
 
 export function JobCard({ job, onPress }: JobCardProps) {
+  const colors = useThemedColors();
+
   return (
-    <Card variant="outlined" style={styles.card}>
+    <Card
+      variant="outlined"
+      style={{
+        marginBottom: 12,
+        padding: 16,
+      }}
+    >
       <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
-        <View style={styles.content}>
-          <View style={styles.logo}>
-            <Text style={styles.logoText}>{job.company.charAt(0)}</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            gap: 12,
+          }}
+        >
+          <View
+            style={{
+              width: 48,
+              height: 48,
+              borderRadius: 12,
+              backgroundColor: colors.primary,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Text
+              style={{
+                color: colors.white,
+                fontSize: 20,
+                fontWeight: '700',
+              }}
+            >
+              {job.company.charAt(0)}
+            </Text>
           </View>
-          <View style={styles.details}>
-            <Text style={styles.title}>{job.title}</Text>
-            <Text style={styles.company}>{job.company}</Text>
-            <View style={styles.badges}>
-              <Badge variant="primary" size="sm">{job.salary}</Badge>
+          <View style={{ flex: 1 }}>
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: '600',
+                color: colors.dark,
+                marginBottom: 4,
+              }}
+            >
+              {job.title}
+            </Text>
+            <Text
+              style={{
+                fontSize: 14,
+                color: colors.secondary,
+                marginBottom: 8,
+              }}
+            >
+              {job.company}
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: 8,
+                marginBottom: 8,
+              }}
+            >
+              <Badge variant="primary" size="sm">
+                {job.salary}
+              </Badge>
               <Badge size="sm">{job.location}</Badge>
             </View>
-            <View style={styles.skills}>
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: 6,
+              }}
+            >
               {job.skills.slice(0, 3).map((skill) => (
-                <View key={skill} style={styles.skillTag}>
-                  <Text style={styles.skillText}>{skill}</Text>
+                <View
+                  key={skill}
+                  style={{
+                    backgroundColor: colors.gray100,
+                    paddingHorizontal: 10,
+                    paddingVertical: 4,
+                    borderRadius: 6,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      color: colors.secondary,
+                    }}
+                  >
+                    {skill}
+                  </Text>
                 </View>
               ))}
             </View>
@@ -38,60 +113,3 @@ export function JobCard({ job, onPress }: JobCardProps) {
     </Card>
   );
 }
-
-const styles = StyleSheet.create({
-  card: {
-    marginBottom: 12,
-    padding: 16,
-  },
-  content: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  logo: {
-    width: 48,
-    height: 48,
-    borderRadius: 12,
-    backgroundColor: colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  logoText: {
-    color: colors.white,
-    fontSize: 20,
-    fontWeight: '700',
-  },
-  details: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.dark,
-    marginBottom: 4,
-  },
-  company: {
-    fontSize: 14,
-    color: colors.secondary,
-    marginBottom: 8,
-  },
-  badges: {
-    flexDirection: 'row',
-    gap: 8,
-    marginBottom: 8,
-  },
-  skills: {
-    flexDirection: 'row',
-    gap: 6,
-  },
-  skillTag: {
-    backgroundColor: colors.gray100,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 6,
-  },
-  skillText: {
-    fontSize: 12,
-    color: colors.secondary,
-  },
-});

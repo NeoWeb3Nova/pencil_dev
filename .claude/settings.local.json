@@ -1,4 +1,18 @@
 {
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{try{const i=JSON.parse(d);const p=i.tool_input?.file_path||'';if(/\\.(md|txt)$/.test(p)&&!/(README|CLAUDE|AGENTS|CONTRIBUTING)\\.md$/.test(p)&&!/\\.claude[\\\\\\\\/]plans[\\\\\\/]/.test(p)&&!/openspec[\\\\\\/]/.test(p)){console.error('[Hook] BLOCKED: Unnecessary documentation file creation');console.error('[Hook] File: '+p);console.error('[Hook] Use README.md for documentation instead');process.exit(2)}}catch{}console.log(d)})\""
+          }
+        ],
+        "description": "Allow .md files in openspec/ directory - project uses OpenSpec for change management"
+      }
+    ]
+  },
   "permissions": {
     "allow": [
       "Bash(pencil_mcp__get_editor_state)",
@@ -31,7 +45,61 @@
       "Bash(powershell:*)",
       "Bash(curl:*)",
       "Bash(start:*)",
-      "Bash(export:*)"
+      "Bash(export:*)",
+      "Bash(node:*)",
+      "Bash(nest new:*)",
+      "Bash(npx prisma:*)",
+      "Bash(git check-ignore:*)",
+      "Bash(git rm:*)",
+      "Bash(git restore:*)",
+      "Bash(git:*)",
+      "Bash(docker-compose up:*)",
+      "Bash(npm run:*)",
+      "Bash(docker-compose:*)",
+      "Bash(docker-compose down:*)",
+      "Bash(findstr 5432:*)",
+      "Bash(docker exec:*)",
+      "Bash(docker port:*)",
+      "Bash(docker:*)",
+      "Bash(wsl hostname:*)",
+      "Bash(wsl:*)",
+      "Bash(npx ts-node:*)",
+      "Bash($env:DATABASE_URL=\"postgresql://postgres:postgres@localhost:5432/web3-job-app?schema=public\":*)",
+      "Bash(dir:*)",
+      "Bash(rm:*)",
+      "Bash(findstr postgres web3:*)",
+      "Bash(mkdir:*)",
+      "Bash(psql:*)",
+      "Bash(Get-NetFirewallRule:*)",
+      "Bash(ss:*)",
+      "Bash(MSYS_NO_PATHCONV=1 docker run:*)",
+      "Bash(npm test:*)",
+      "Bash(cp:*)",
+      "WebFetch(domain:github.com)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__query-docs",
+      "Bash(npm view:*)",
+      "Bash(npx:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(cat:*)",
+      "Bash(where npx:*)",
+      "Bash(\"C:/Users/almyq/AppData/Local/Android/Sdk/platform-tools/adb.exe\" version:*)",
+      "Bash(\"C:/Users/almyq/AppData/Local/Android/Sdk/emulator/emulator.exe\":*)",
+      "Bash(\"C:/Users/almyq/AppData/Local/Android/Sdk/platform-tools/adb.exe\" devices:*)",
+      "Bash(where java:*)",
+      "Bash(\"C:/Users/almyq/AppData/Local/Android/Sdk/platform-tools/adb.exe\" shell:*)",
+      "Bash(\"C:/Users/almyq/AppData/Local/Android/Sdk/platform-tools/adb.exe\" logcat:*)",
+      "Bash(openspec list:*)",
+      "Bash(openspec status:*)",
+      "Bash(openspec new:*)",
+      "Bash(openspec instructions:*)",
+      "Bash(openspec propose:*)",
+      "Bash(openspec:*)",
+      "Bash(\"D:/Test/pencil_dev/web3-job-app/openspec/changes/app-i18n-support/proposal.md\":*)",
+      "Bash(\"D:/Test/pencil_dev/web3-job-app/openspec/changes/app-i18n-support/design.md\":*)",
+      "Bash(\"D:/Test/pencil_dev/web3-job-app/openspec/changes/app-i18n-support/specs/app-i18n/spec.md\":*)",
+      "Bash(\"D:/Test/pencil_dev/web3-job-app/openspec/changes/app-i18n-support/specs/language-persistence/spec.md\":*)",
+      "Bash(\"D:/Test/pencil_dev/web3-job-app/openspec/changes/app-i18n-support/tasks.md\":*)"
     ]
   }
 }

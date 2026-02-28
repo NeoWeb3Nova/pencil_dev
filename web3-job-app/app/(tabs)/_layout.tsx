@@ -10,7 +10,7 @@ import {
   Bell,
   Search,
 } from 'lucide-react-native';
-import { colors } from '@/lib/constants';
+import { useThemedColors } from '@/lib/useThemedColors';
 import { useAppStore } from '@/store/app-store';
 import { t } from '@/lib/i18n';
 
@@ -21,6 +21,7 @@ function TabBarIcon({ icon, color, size = 24 }: { icon: React.ElementType; color
 
 export default function TabLayout() {
   const { language } = useAppStore();
+  const colors = useThemedColors();
 
   return (
     <Tabs

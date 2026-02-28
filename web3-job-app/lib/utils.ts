@@ -5,8 +5,16 @@ export const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('wi
 
 // 注意：需要安装 clsx: npm install clsx
 // 如果没有安装，可以简单地用这个替代：
-export function cn(...inputs: unknown[]) {
-  return inputs.filter(Boolean).join(' ');
+export function cn(...inputs: ClassValue[]) {
+  return clsx(...inputs);
+}
+
+// NativeWind tw 函数 - 用于 className 处理
+export function tw(classNames: TemplateStringsArray | string, ...values: ClassValue[]) {
+  if (typeof classNames === 'string') {
+    return clsx(classNames, ...values);
+  }
+  return clsx(classNames, ...values);
 }
 
 export function formatSalary(min: number, max: number): string {

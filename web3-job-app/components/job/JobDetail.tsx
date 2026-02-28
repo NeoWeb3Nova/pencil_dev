@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { Job } from '@/types';
-import { colors } from '@/lib/constants';
+import { useThemedColors } from '@/lib/useThemedColors';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
@@ -15,6 +15,7 @@ interface JobDetailProps {
 
 export function JobDetail({ job, onApply }: JobDetailProps) {
   const { language } = useAppStore();
+  const colors = useThemedColors();
   const [isApplying, setIsApplying] = useState(false);
 
   const handleApply = async () => {
@@ -25,39 +26,170 @@ export function JobDetail({ job, onApply }: JobDetailProps) {
   };
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <Card style={styles.card}>
-        <View style={styles.header}>
-          <View style={[styles.logo, { backgroundColor: colors.primary }]}>
-            <Text style={styles.logoText}>⬡</Text>
+    <ScrollView
+      style={{
+        flex: 1,
+        backgroundColor: colors.background,
+      }}
+      showsVerticalScrollIndicator={false}
+    >
+      <Card
+        style={{
+          margin: 16,
+          padding: 20,
+        }}
+      >
+        <View
+          style={{
+            flexDirection: 'row',
+            gap: 16,
+            marginBottom: 24,
+          }}
+        >
+          <View
+            style={[
+              {
+                width: 64,
+                height: 64,
+                borderRadius: 16,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: colors.primary,
+              },
+            ]}
+          >
+            <Text
+              style={{
+                color: colors.white,
+                fontSize: 28,
+              }}
+            >
+              ⬡
+            </Text>
           </View>
-          <View style={styles.info}>
-            <Text style={styles.title}>{job.title}</Text>
-            <Text style={styles.company}>{job.company} • {job.location}</Text>
-            <View style={styles.salaryBadge}>
-              <Text style={styles.salaryText}>{job.salary}</Text>
+          <View style={{ flex: 1 }}>
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: '700',
+                color: colors.dark,
+                marginBottom: 4,
+              }}
+            >
+              {job.title}
+            </Text>
+            <Text
+              style={{
+                fontSize: 14,
+                color: colors.secondary,
+                marginBottom: 8,
+              }}
+            >
+              {job.company} • {job.location}
+            </Text>
+            <View
+              style={{
+                backgroundColor: colors.primary,
+                alignSelf: 'flex-start',
+                paddingHorizontal: 12,
+                paddingVertical: 6,
+                borderRadius: 8,
+              }}
+            >
+              <Text
+                style={{
+                  color: colors.white,
+                  fontSize: 12,
+                  fontWeight: '600',
+                }}
+              >
+                {job.salary}
+              </Text>
             </View>
           </View>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>{t('jobDescription', language)}</Text>
-          <Text style={styles.description}>{job.description}</Text>
+        <View style={{ marginBottom: 24 }}>
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: '600',
+              color: colors.dark,
+              marginBottom: 12,
+            }}
+          >
+            {t('jobDescription', language)}
+          </Text>
+          <Text
+            style={{
+              fontSize: 14,
+              color: colors.secondary,
+              lineHeight: 22,
+            }}
+          >
+            {job.description}
+          </Text>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>{t('jobRequirements', language)}</Text>
+        <View style={{ marginBottom: 24 }}>
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: '600',
+              color: colors.dark,
+              marginBottom: 12,
+            }}
+          >
+            {t('jobRequirements', language)}
+          </Text>
           {job.requirements.map((req, index) => (
-            <View key={index} style={styles.requirement}>
-              <Text style={styles.checkmark}>✓</Text>
-              <Text style={styles.requirementText}>{req}</Text>
+            <View
+              key={index}
+              style={{
+                flexDirection: 'row',
+                gap: 8,
+                marginBottom: 8,
+              }}
+            >
+              <Text
+                style={{
+                  color: colors.primary,
+                  fontWeight: '700',
+                }}
+              >
+                ✓
+              </Text>
+              <Text
+                style={{
+                  flex: 1,
+                  fontSize: 14,
+                  color: colors.secondary,
+                }}
+              >
+                {req}
+              </Text>
             </View>
           ))}
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>{t('skillsTags', language)}</Text>
-          <View style={styles.skills}>
+        <View style={{ marginBottom: 24 }}>
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: '600',
+              color: colors.dark,
+              marginBottom: 12,
+            }}
+          >
+            {t('skillsTags', language)}
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              gap: 8,
+            }}
+          >
             {job.skills.map((skill) => (
               <Badge key={skill} variant="default" size="md">
                 {skill}
@@ -66,12 +198,12 @@ export function JobDetail({ job, onApply }: JobDetailProps) {
           </View>
         </View>
 
-        <View style={styles.applySection}>
+        <View style={{ marginTop: 8 }}>
           <Button
             onPress={handleApply}
             loading={isApplying}
             size="lg"
-            style={styles.applyButton}
+            style={{ width: '100%' }}
           >
             {t('applyNow', language)}
           </Button>
@@ -80,95 +212,3 @@ export function JobDetail({ job, onApply }: JobDetailProps) {
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  card: {
-    margin: 16,
-    padding: 20,
-  },
-  header: {
-    flexDirection: 'row',
-    gap: 16,
-    marginBottom: 24,
-  },
-  logo: {
-    width: 64,
-    height: 64,
-    borderRadius: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  logoText: {
-    color: colors.white,
-    fontSize: 28,
-  },
-  info: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: colors.dark,
-    marginBottom: 4,
-  },
-  company: {
-    fontSize: 14,
-    color: colors.secondary,
-    marginBottom: 8,
-  },
-  salaryBadge: {
-    backgroundColor: colors.primary,
-    alignSelf: 'flex-start',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 8,
-  },
-  salaryText: {
-    color: colors.white,
-    fontSize: 12,
-    fontWeight: '600',
-  },
-  section: {
-    marginBottom: 24,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.dark,
-    marginBottom: 12,
-  },
-  description: {
-    fontSize: 14,
-    color: colors.secondary,
-    lineHeight: 22,
-  },
-  requirement: {
-    flexDirection: 'row',
-    gap: 8,
-    marginBottom: 8,
-  },
-  checkmark: {
-    color: colors.primary,
-    fontWeight: '700',
-  },
-  requirementText: {
-    flex: 1,
-    fontSize: 14,
-    color: colors.secondary,
-  },
-  skills: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  applySection: {
-    marginTop: 8,
-  },
-  applyButton: {
-    width: '100%',
-  },
-});

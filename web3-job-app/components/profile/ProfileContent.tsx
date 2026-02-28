@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { UserProfile } from '@/types';
-import { colors } from '@/lib/constants';
+import { useThemedColors } from '@/lib/useThemedColors';
 import { Card } from '@/components/ui/Card';
 import { useAppStore } from '@/store/app-store';
 import { t } from '@/lib/i18n';
@@ -14,6 +14,7 @@ interface ProfileContentProps {
 
 export function ProfileContent({ profile, onMenuItemPress }: ProfileContentProps) {
   const { language } = useAppStore();
+  const colors = useThemedColors();
 
   const menuItems1 = [
     { id: 'resume', label: t('myResume', language), icon: '📄' },
@@ -27,163 +28,270 @@ export function ProfileContent({ profile, onMenuItemPress }: ProfileContentProps
   ];
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      style={{
+        flex: 1,
+        backgroundColor: colors.background,
+      }}
+      showsVerticalScrollIndicator={false}
+    >
       {/* Profile Header */}
-      <Card style={styles.profileCard}>
-        <View style={styles.avatar}>
-          <Text style={styles.avatarText}>👤</Text>
+      <Card
+        style={{
+          margin: 16,
+          padding: 24,
+          alignItems: 'center',
+        }}
+      >
+        <View
+          style={{
+            width: 100,
+            height: 100,
+            borderRadius: 50,
+            backgroundColor: colors.primary,
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginBottom: 16,
+          }}
+        >
+          <Text style={{ fontSize: 40 }}>👤</Text>
         </View>
-        <Text style={styles.name}>{profile.name}</Text>
-        <Text style={styles.email}>{profile.email}</Text>
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: '700',
+            color: colors.dark,
+            marginBottom: 4,
+          }}
+        >
+          {profile.name}
+        </Text>
+        <Text
+          style={{
+            fontSize: 14,
+            color: colors.secondary,
+          }}
+        >
+          {profile.email}
+        </Text>
       </Card>
 
       {/* Stats Row */}
-      <View style={styles.statsRow}>
-        <Card style={styles.statCard}>
-          <Text style={styles.statNumber}>{profile.stats.applied}</Text>
-          <Text style={styles.statLabel}>{t('applied', language)}</Text>
+      <View
+        style={{
+          flexDirection: 'row',
+          gap: 12,
+          paddingHorizontal: 16,
+          marginBottom: 20,
+        }}
+      >
+        <Card
+          style={{
+            flex: 1,
+            padding: 16,
+            alignItems: 'center',
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 24,
+              fontWeight: '700',
+              color: colors.primary,
+              marginBottom: 4,
+            }}
+          >
+            {profile.stats.applied}
+          </Text>
+          <Text
+            style={{
+              fontSize: 12,
+              color: colors.secondary,
+            }}
+          >
+            {t('applied', language)}
+          </Text>
         </Card>
-        <Card style={styles.statCard}>
-          <Text style={styles.statNumber}>{profile.stats.interviews}</Text>
-          <Text style={styles.statLabel}>{t('interviews', language)}</Text>
+        <Card
+          style={{
+            flex: 1,
+            padding: 16,
+            alignItems: 'center',
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 24,
+              fontWeight: '700',
+              color: colors.primary,
+              marginBottom: 4,
+            }}
+          >
+            {profile.stats.interviews}
+          </Text>
+          <Text
+            style={{
+              fontSize: 12,
+              color: colors.secondary,
+            }}
+          >
+            {t('interviews', language)}
+          </Text>
         </Card>
-        <Card style={styles.statCard}>
-          <Text style={styles.statNumber}>{profile.stats.offers}</Text>
-          <Text style={styles.statLabel}>{t('offers', language)}</Text>
+        <Card
+          style={{
+            flex: 1,
+            padding: 16,
+            alignItems: 'center',
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 24,
+              fontWeight: '700',
+              color: colors.primary,
+              marginBottom: 4,
+            }}
+          >
+            {profile.stats.offers}
+          </Text>
+          <Text
+            style={{
+              fontSize: 12,
+              color: colors.secondary,
+            }}
+          >
+            {t('offers', language)}
+          </Text>
         </Card>
       </View>
 
       {/* Menu Section 1 */}
-      <Card style={styles.menuCard}>
+      <Card
+        style={{
+          marginHorizontal: 16,
+          marginBottom: 20,
+          overflow: 'hidden',
+        }}
+      >
         {menuItems1.map((item, index) => (
           <TouchableOpacity
             key={item.id}
-            style={[styles.menuItem, index !== menuItems1.length - 1 && styles.menuItemBorder]}
+            style={[
+              {
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingVertical: 16,
+                paddingHorizontal: 16,
+                borderBottomWidth: index !== menuItems1.length - 1 ? 1 : 0,
+                borderBottomColor: colors.gray100,
+              },
+            ]}
             onPress={() => onMenuItemPress?.(item.id)}
           >
-            <View style={styles.menuItemContent}>
-              <Text style={styles.menuIcon}>{item.icon}</Text>
-              <Text style={styles.menuLabel}>{item.label}</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 12,
+              }}
+            >
+              <Text style={{ fontSize: 20 }}>{item.icon}</Text>
+              <Text
+                style={{
+                  fontSize: 14,
+                  color: colors.dark,
+                }}
+              >
+                {item.label}
+              </Text>
             </View>
-            <Text style={styles.chevron}>›</Text>
+            <Text
+              style={{
+                fontSize: 24,
+                color: colors.muted,
+              }}
+            >
+              ›
+            </Text>
           </TouchableOpacity>
         ))}
       </Card>
 
       {/* Menu Section 2 */}
-      <Card style={styles.menuCard}>
+      <Card
+        style={{
+          marginHorizontal: 16,
+          marginBottom: 20,
+          overflow: 'hidden',
+        }}
+      >
         {menuItems2.map((item, index) => (
           <TouchableOpacity
             key={item.id}
-            style={[styles.menuItem, index !== menuItems2.length - 1 && styles.menuItemBorder]}
+            style={[
+              {
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingVertical: 16,
+                paddingHorizontal: 16,
+                borderBottomWidth: index !== menuItems2.length - 1 ? 1 : 0,
+                borderBottomColor: colors.gray100,
+              },
+            ]}
             onPress={() => onMenuItemPress?.(item.id)}
           >
-            <View style={styles.menuItemContent}>
-              <Text style={styles.menuIcon}>{item.icon}</Text>
-              <Text style={styles.menuLabel}>{item.label}</Text>
-              {item.value && <Text style={styles.menuValue}>{item.value}</Text>}
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 12,
+              }}
+            >
+              <Text style={{ fontSize: 20 }}>{item.icon}</Text>
+              <Text
+                style={{
+                  fontSize: 14,
+                  color: colors.dark,
+                }}
+              >
+                {item.label}
+              </Text>
+              {item.value && (
+                <Text
+                  style={{
+                    fontSize: 14,
+                    color: colors.secondary,
+                    marginLeft: 8,
+                  }}
+                >
+                  {item.value}
+                </Text>
+              )}
             </View>
-            <Text style={styles.chevron}>›</Text>
+            <Text
+              style={{
+                fontSize: 24,
+                color: colors.muted,
+              }}
+            >
+              ›
+            </Text>
           </TouchableOpacity>
         ))}
       </Card>
 
       {/* Theme Toggle */}
-      <Card style={styles.menuCard}>
+      <Card
+        style={{
+          marginHorizontal: 16,
+          marginBottom: 20,
+          overflow: 'hidden',
+        }}
+      >
         <ThemeToggle />
       </Card>
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  profileCard: {
-    margin: 16,
-    padding: 24,
-    alignItems: 'center',
-  },
-  avatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  avatarText: {
-    fontSize: 40,
-  },
-  name: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: colors.dark,
-    marginBottom: 4,
-  },
-  email: {
-    fontSize: 14,
-    color: colors.secondary,
-  },
-  statsRow: {
-    flexDirection: 'row',
-    gap: 12,
-    paddingHorizontal: 16,
-    marginBottom: 20,
-  },
-  statCard: {
-    flex: 1,
-    padding: 16,
-    alignItems: 'center',
-  },
-  statNumber: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: colors.primary,
-    marginBottom: 4,
-  },
-  statLabel: {
-    fontSize: 12,
-    color: colors.secondary,
-  },
-  menuCard: {
-    marginHorizontal: 16,
-    marginBottom: 20,
-    overflow: 'hidden',
-  },
-  menuItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 16,
-    paddingHorizontal: 16,
-  },
-  menuItemBorder: {
-    borderBottomWidth: 1,
-    borderBottomColor: colors.gray100,
-  },
-  menuItemContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  menuIcon: {
-    fontSize: 20,
-  },
-  menuLabel: {
-    fontSize: 14,
-    color: colors.dark,
-  },
-  menuValue: {
-    fontSize: 14,
-    color: colors.secondary,
-    marginLeft: 8,
-  },
-  chevron: {
-    fontSize: 24,
-    color: colors.muted,
-  },
-});
