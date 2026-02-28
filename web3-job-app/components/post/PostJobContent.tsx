@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { colors } from '@/lib/constants';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { useThemedColors } from '@/lib/useThemedColors';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { useAppStore } from '@/store/app-store';
@@ -12,6 +12,7 @@ interface PostJobContentProps {
 
 export function PostJobContent({ onSubmit }: PostJobContentProps) {
   const { language } = useAppStore();
+  const colors = useThemedColors();
   const [formData, setFormData] = React.useState({
     title: '',
     company: '',
@@ -33,8 +34,14 @@ export function PostJobContent({ onSubmit }: PostJobContentProps) {
   };
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <View style={styles.form}>
+    <ScrollView
+      style={{
+        flex: 1,
+        backgroundColor: colors.background,
+      }}
+      showsVerticalScrollIndicator={false}
+    >
+      <View style={{ padding: 16 }}>
         <Input
           label={t('jobTitleLabel', language)}
           placeholder={t('jobTitlePlaceholder', language)}
@@ -56,8 +63,13 @@ export function PostJobContent({ onSubmit }: PostJobContentProps) {
           onChangeText={(text) => setFormData({ ...formData, location: text })}
         />
 
-        <View style={styles.salaryRow}>
-          <View style={styles.salaryInput}>
+        <View
+          style={{
+            flexDirection: 'row',
+            gap: 12,
+          }}
+        >
+          <View style={{ flex: 1 }}>
             <Input
               label={t('salaryMinLabel', language)}
               placeholder={t('salaryMinPlaceholder', language)}
@@ -65,7 +77,7 @@ export function PostJobContent({ onSubmit }: PostJobContentProps) {
               onChangeText={(text) => setFormData({ ...formData, salaryMin: text })}
             />
           </View>
-          <View style={styles.salaryInput}>
+          <View style={{ flex: 1 }}>
             <Input
               label={t('salaryMaxLabel', language)}
               placeholder={t('salaryMaxPlaceholder', language)}
@@ -75,22 +87,45 @@ export function PostJobContent({ onSubmit }: PostJobContentProps) {
           </View>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionLabel}>{t('jobTypeLabel', language)}</Text>
-          <View style={styles.jobTypes}>
+        <View style={{ marginBottom: 20 }}>
+          <Text
+            style={{
+              fontSize: 14,
+              fontWeight: '600',
+              color: colors.dark,
+              marginBottom: 8,
+            }}
+          >
+            {t('jobTypeLabel', language)}
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              gap: 8,
+            }}
+          >
             {jobTypes.map((type) => (
               <TouchableOpacity
                 key={type.id}
                 onPress={() => setFormData({ ...formData, jobType: type.id })}
                 style={[
-                  styles.jobTypePill,
-                  formData.jobType === type.id && styles.jobTypePillActive,
+                  {
+                    backgroundColor:
+                      formData.jobType === type.id ? colors.primary : colors.gray100,
+                    paddingHorizontal: 16,
+                    paddingVertical: 10,
+                    borderRadius: 20,
+                  },
                 ]}
               >
                 <Text
                   style={[
-                    styles.jobTypeText,
-                    formData.jobType === type.id && styles.jobTypeTextActive,
+                    {
+                      fontSize: 14,
+                      fontWeight: '600',
+                      color:
+                        formData.jobType === type.id ? colors.white : colors.secondary,
+                    },
                   ]}
                 >
                   {type.label}
@@ -100,9 +135,24 @@ export function PostJobContent({ onSubmit }: PostJobContentProps) {
           </View>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionLabel}>{t('skillsLabel', language)}</Text>
-          <View style={styles.skills}>
+        <View style={{ marginBottom: 20 }}>
+          <Text
+            style={{
+              fontSize: 14,
+              fontWeight: '600',
+              color: colors.dark,
+              marginBottom: 8,
+            }}
+          >
+            {t('skillsLabel', language)}
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              gap: 8,
+            }}
+          >
             {['Solidity', 'Web3.js', 'DeFi'].map((skill) => (
               <TouchableOpacity
                 key={skill}
@@ -113,14 +163,23 @@ export function PostJobContent({ onSubmit }: PostJobContentProps) {
                   setFormData({ ...formData, skills });
                 }}
                 style={[
-                  styles.skillTag,
-                  formData.skills.includes(skill) && styles.skillTagActive,
+                  {
+                    backgroundColor:
+                      formData.skills.includes(skill) ? colors.primary : colors.gray100,
+                    paddingHorizontal: 14,
+                    paddingVertical: 8,
+                    borderRadius: 8,
+                  },
                 ]}
               >
                 <Text
                   style={[
-                    styles.skillText,
-                    formData.skills.includes(skill) && styles.skillTextActive,
+                    {
+                      fontSize: 14,
+                      fontWeight: '500',
+                      color:
+                        formData.skills.includes(skill) ? colors.white : colors.secondary,
+                    },
                   ]}
                 >
                   {skill} {formData.skills.includes(skill) ? '✓' : '+'}
@@ -130,82 +189,10 @@ export function PostJobContent({ onSubmit }: PostJobContentProps) {
           </View>
         </View>
 
-        <Button onPress={handleSubmit} size="lg" style={styles.submitButton}>
+        <Button onPress={handleSubmit} size="lg" style={{ marginTop: 8 }}>
           {t('submitJob', language)}
         </Button>
       </View>
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  form: {
-    padding: 16,
-  },
-  salaryRow: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  salaryInput: {
-    flex: 1,
-  },
-  section: {
-    marginBottom: 20,
-  },
-  sectionLabel: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors.dark,
-    marginBottom: 8,
-  },
-  jobTypes: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  jobTypePill: {
-    backgroundColor: colors.gray100,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 20,
-  },
-  jobTypePillActive: {
-    backgroundColor: colors.primary,
-  },
-  jobTypeText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors.secondary,
-  },
-  jobTypeTextActive: {
-    color: colors.white,
-  },
-  skills: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  skillTag: {
-    backgroundColor: colors.gray100,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 8,
-  },
-  skillTagActive: {
-    backgroundColor: colors.primary,
-  },
-  skillText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: colors.secondary,
-  },
-  skillTextActive: {
-    color: colors.white,
-  },
-  submitButton: {
-    marginTop: 8,
-  },
-});

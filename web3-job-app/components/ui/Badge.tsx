@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { colors } from '@/lib/constants';
+import { View, Text } from 'react-native';
+import { useThemedColors } from '@/lib/useThemedColors';
 
 interface BadgeProps {
   children: React.ReactNode;
@@ -9,24 +9,56 @@ interface BadgeProps {
 }
 
 export function Badge({ children, variant = 'default', size = 'md' }: BadgeProps) {
+  const colors = useThemedColors();
+
+  const getBadgeStyle = () => {
+    switch (variant) {
+      case 'primary':
+        return { backgroundColor: colors.primary };
+      case 'success':
+        return { backgroundColor: '#10B981' };
+      case 'warning':
+        return { backgroundColor: '#F59E0B' };
+      default:
+        return { backgroundColor: colors.gray100 };
+    }
+  };
+
+  const getTextStyle = () => {
+    if (variant === 'default') {
+      return { color: colors.secondary };
+    }
+    return { color: colors.white };
+  };
+
+  const getSizeStyle = () => {
+    if (size === 'sm') {
+      return { paddingHorizontal: 8, paddingVertical: 4, fontSize: 10 };
+    }
+    return { paddingHorizontal: 12, paddingVertical: 6, fontSize: 12 };
+  };
+
+  const sizeStyle = getSizeStyle();
+
   return (
     <View
       style={[
-        styles.badge,
-        variant === 'primary' && styles.primary,
-        variant === 'success' && styles.success,
-        variant === 'warning' && styles.warning,
-        size === 'sm' && styles.sm,
-        size === 'md' && styles.md,
+        {
+          borderRadius: 16,
+          justifyContent: 'center',
+        },
+        getBadgeStyle(),
       ]}
     >
       <Text
         style={[
-          styles.text,
-          variant === 'primary' && styles.textPrimary,
-          variant === 'success' && styles.textSuccess,
-          variant === 'warning' && styles.textWarning,
-          size === 'sm' && styles.textSm,
+          {
+            fontWeight: '600',
+            fontSize: sizeStyle.fontSize,
+            paddingVertical: sizeStyle.paddingVertical,
+            paddingHorizontal: sizeStyle.paddingHorizontal,
+          },
+          getTextStyle(),
         ]}
       >
         {children}
@@ -34,47 +66,3 @@ export function Badge({ children, variant = 'default', size = 'md' }: BadgeProps
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  badge: {
-    borderRadius: 16,
-    justifyContent: 'center',
-  },
-  sm: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-  },
-  md: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-  },
-  default: {
-    backgroundColor: colors.gray100,
-  },
-  primary: {
-    backgroundColor: colors.primary,
-  },
-  success: {
-    backgroundColor: '#10B981',
-  },
-  warning: {
-    backgroundColor: '#F59E0B',
-  },
-  text: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: colors.secondary,
-  },
-  textSm: {
-    fontSize: 10,
-  },
-  textPrimary: {
-    color: colors.white,
-  },
-  textSuccess: {
-    color: colors.white,
-  },
-  textWarning: {
-    color: colors.white,
-  },
-});
