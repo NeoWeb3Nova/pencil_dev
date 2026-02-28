@@ -1,21 +1,27 @@
-import { IsString, IsNotEmpty, IsOptional, IsEnum } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsEnum, IsEmail, MinLength, Matches, IsStrongPassword } from 'class-validator';
 import { WalletType } from '../../wallet-profiles/dto/wallet-profile.dto';
 
 export class RegisterDto {
-  @IsString()
-  @IsNotEmpty()
+  @IsEmail({}, { message: 'Invalid email format' })
+  @IsNotEmpty({ message: 'Email is required' })
   email: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Password is required' })
+  @MinLength(8, { message: 'Password must be at least 8 characters long' })
+  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, {
+    message: 'Password must contain at least one uppercase letter, one lowercase letter, and one number',
+  })
   password: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Name is required' })
+  @MinLength(2, { message: 'Name must be at least 2 characters long' })
   name: string;
 
   @IsOptional()
   @IsString()
+  @Matches(/^0x[a-fA-F0-9]{40}$/, { message: 'Invalid wallet address format' })
   walletAddress?: string;
 }
 

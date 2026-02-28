@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import * as SecureStore from 'expo-secure-store';
-import { login as apiLogin, logout as apiLogout, getProfile } from '@/lib/api';
-import type { LoginRequest, UserProfile } from '@/types';
+import { login as apiLogin, register as apiRegister, logout as apiLogout, getProfile } from '@/lib/api';
+import type { LoginRequest, RegisterRequest, UserProfile } from '@/types';
 
 const TOKEN_KEY = '@web3job:token';
 const USER_KEY = '@web3job:user';
@@ -15,6 +15,7 @@ interface AuthState {
 
   // 动作
   login: (credentials: LoginRequest) => Promise<{ success: boolean; error?: string }>;
+  register: (data: RegisterRequest) => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
   initializeAuth: () => Promise<void>;
   refreshProfile: () => Promise<void>;
@@ -96,6 +97,49 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       return { success: true };
     } catch (error) {
       console.error('Login error:', error);
+      set({ isLoading: false });
+      return {
+        success: false,
+        error: '网络错误，请稍后重试',
+      };
+    }
+  },
+
+  // 注册
+  register: async (data: RegisterRequest) => {
+    try {
+      set({ isLoading: true });
+
+      const result = await apiRegister({
+        email: data.email,
+        password: data.password,
+        name: data.name,
+      });
+
+      if (!result.success || !result.data) {
+        set({ isLoading: false });
+        return {
+          success: false,
+          error: result.error || '注册失败',
+        };
+      }
+
+      const { access_token, user } = result.data;
+
+      // 存储 token 和用户信息
+      await SecureStore.setItemAsync(TOKEN_KEY, access_token);
+      await SecureStore.setItemAsync(USER_KEY, JSON.stringify(user));
+
+      set({
+        isLoggedIn: true,
+        token: access_token,
+        user: user as UserProfile,
+        isLoading: false,
+      });
+
+      return { success: true };
+    } catch (error) {
+      console.error('Register error:', error);
       set({ isLoading: false });
       return {
         success: false,

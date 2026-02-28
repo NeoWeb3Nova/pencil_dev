@@ -6,6 +6,10 @@ import {
   UseGuards,
   Request,
   Logger,
+  HttpCode,
+  HttpStatus,
+  BadRequestException,
+  ConflictException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
@@ -28,17 +32,29 @@ export class AuthController {
   ) {}
 
   @Post('register')
+  @HttpCode(HttpStatus.CREATED)
   async register(@Body() registerDto: RegisterDto) {
-    const result = await this.authService.register(
-      registerDto.email,
-      registerDto.password,
-      registerDto.name,
-      registerDto.walletAddress,
-    );
-    return {
-      success: true,
-      data: result,
-    };
+    try {
+      const result = await this.authService.register(
+        registerDto.email,
+        registerDto.password,
+        registerDto.name,
+        registerDto.walletAddress,
+      );
+      return {
+        success: true,
+        data: result,
+      };
+    } catch (error) {
+      if (error instanceof ConflictException) {
+        return {
+          success: false,
+          data: null,
+          error: error.message,
+        };
+      }
+      throw error;
+    }
   }
 
   @Post('login')

@@ -1,4 +1,4 @@
-import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException, ConflictException, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../database/prisma.service';
 import { Web3Service } from '../web3/web3.service';
@@ -177,10 +177,10 @@ export class AuthService {
 
     if (existingUser) {
       if (existingUser.email === email) {
-        throw new Error('Email already registered');
+        throw new ConflictException('Email already registered');
       }
       if (existingUser.walletAddress === walletAddress) {
-        throw new Error('Wallet address already registered');
+        throw new ConflictException('Wallet address already registered');
       }
     }
 
@@ -210,9 +210,22 @@ export class AuthService {
       });
     }
 
+    // Generate JWT token
+    const payload: JwtPayload = {
+      sub: user.id,
+      email: user.email,
+      walletAddress: user.walletAddress,
+      role: user.role,
+    };
+
+    const access_token = this.jwtService.sign(payload);
+
     // Remove password from returned user
     const { passwordHash: _, ...result } = user;
-    return result;
+    return {
+      access_token,
+      user: result,
+    };
   }
 
   /**

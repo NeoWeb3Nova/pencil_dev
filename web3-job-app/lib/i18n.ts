@@ -89,14 +89,28 @@ export const translations = {
     loginError: '登录时出错',
     welcomeBack: '欢迎回来',
     register: '注册',
+    registerTitle: '创建账号',
+    registerSuccess: '注册成功',
+    registerFailed: '注册失败',
+    registerError: '注册时出错',
+    createAccount: '创建账号',
     noAccount: '还没有账号？',
     hasAccount: '已有账号？',
     toLogin: '去登录',
+    toRegister: '去注册',
     logout: '登出',
     email: '邮箱',
     emailPlaceholder: '请输入邮箱地址',
     password: '密码',
     passwordPlaceholder: '请输入密码',
+    confirmPassword: '确认密码',
+    confirmPasswordPlaceholder: '请再次输入密码',
+    passwordMismatch: '两次输入的密码不一致',
+    passwordTooShort: '密码至少 8 位',
+    passwordStrength: '密码必须包含大小写字母和数字',
+    name: '姓名',
+    namePlaceholder: '请输入姓名',
+    nameTooShort: '姓名至少 2 个字符',
     forgotPassword: '忘记密码？',
     postJobs: '发布职位',
     postJobsDesc: '发布职位，吸引优秀人才',
@@ -195,14 +209,28 @@ export const translations = {
     loginError: 'An error occurred during login',
     welcomeBack: 'Welcome back',
     register: 'Register',
+    registerTitle: 'Create Account',
+    registerSuccess: 'Registration Successful',
+    registerFailed: 'Registration Failed',
+    registerError: 'An error occurred during registration',
+    createAccount: 'Create Account',
     noAccount: 'Don\'t have an account?',
     hasAccount: 'Already have an account?',
     toLogin: 'Login',
+    toRegister: 'Register',
     logout: 'Logout',
     email: 'Email',
     emailPlaceholder: 'Enter your email',
     password: 'Password',
     passwordPlaceholder: 'Enter your password',
+    confirmPassword: 'Confirm Password',
+    confirmPasswordPlaceholder: 'Re-enter your password',
+    passwordMismatch: 'Passwords do not match',
+    passwordTooShort: 'Password must be at least 8 characters',
+    passwordStrength: 'Password must contain uppercase, lowercase, and number',
+    name: 'Name',
+    namePlaceholder: 'Enter your name',
+    nameTooShort: 'Name must be at least 2 characters',
     forgotPassword: 'Forgot password?',
     postJobs: 'Post Jobs',
     postJobsDesc: 'Post jobs to attract talent',
@@ -222,7 +250,10 @@ export type TranslationKey = keyof typeof translations.zh |
   'forgotPassword' | 'loginSuccess' | 'loginFailed' | 'loginError' |
   'welcomeBack' | 'loginToExplore' | 'postJobs' | 'postJobsDesc' |
   'messaging' | 'messagingDesc' | 'notifications' | 'notificationsDesc' |
-  'resumeDesc';
+  'resumeDesc' | 'registerTitle' | 'registerSuccess' | 'registerFailed' |
+  'registerError' | 'createAccount' | 'toRegister' | 'confirmPassword' |
+  'confirmPasswordPlaceholder' | 'passwordMismatch' | 'passwordTooShort' |
+  'passwordStrength' | 'name' | 'namePlaceholder' | 'nameTooShort';
 
 export function t(key: TranslationKey, lang: Language): string {
   return (translations[lang] as any)[key] || translations.zh[key as keyof typeof translations.zh] || key;

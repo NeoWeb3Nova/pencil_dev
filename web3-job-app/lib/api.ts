@@ -113,13 +113,13 @@ export async function register(data: RegisterRequest): Promise<ApiResponse<AuthR
       body: JSON.stringify(data),
     });
 
-    const result = await handleResponse<AuthResponse>(response);
+    const result = await handleResponse<{ access_token: string; user: any }>(response);
 
     if (result.success && result.data) {
       await setToken(result.data.access_token);
     }
 
-    return result;
+    return result as ApiResponse<AuthResponse>;
   } catch (error) {
     return {
       success: false,

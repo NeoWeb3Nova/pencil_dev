@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { Web3Service } from '../web3/web3.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RegisterDto, LoginDto, WalletLoginDto, WalletChallengeDto } from './dto/auth.dto';
+import { ConflictException } from '@nestjs/common';
 
 describe('AuthController', () => {
   let authController: AuthController;
@@ -55,13 +56,17 @@ describe('AuthController', () => {
     it('should register a new user successfully', async () => {
       const registerDto: RegisterDto = {
         email: 'test@example.com',
-        password: 'password123',
+        password: 'Password123',
         name: 'Test User',
         walletAddress: undefined,
       };
 
       const mockUser = { id: '1', email: 'test@example.com', name: 'Test User' };
-      mockAuthService.register.mockResolvedValue(mockUser);
+      const mockResult = {
+        access_token: 'jwt-token',
+        user: mockUser,
+      };
+      mockAuthService.register.mockResolvedValue(mockResult);
 
       const result = await authController.register(registerDto);
 
@@ -73,20 +78,49 @@ describe('AuthController', () => {
       );
       expect(result).toEqual({
         success: true,
-        data: mockUser,
+        data: mockResult,
       });
     });
 
-    it('should handle registration error', async () => {
+    it('should handle ConflictException for duplicate email', async () => {
       const registerDto: RegisterDto = {
         email: 'existing@example.com',
-        password: 'password123',
+        password: 'Password123',
         name: 'Test User',
       };
 
-      mockAuthService.register.mockRejectedValue(new Error('Email already registered'));
+      mockAuthService.register.mockRejectedValue(
+        new ConflictException('Email already registered')
+      );
 
-      await expect(authController.register(registerDto)).rejects.toThrow('Email already registered');
+      const result = await authController.register(registerDto);
+
+      expect(result).toEqual({
+        success: false,
+        data: null,
+        error: 'Email already registered',
+      });
+    });
+
+    it('should handle ConflictException for duplicate wallet address', async () => {
+      const registerDto: RegisterDto = {
+        email: 'new@example.com',
+        password: 'Password123',
+        name: 'Test User',
+        walletAddress: '0x1234567890123456789012345678901234567890',
+      };
+
+      mockAuthService.register.mockRejectedValue(
+        new ConflictException('Wallet address already registered')
+      );
+
+      const result = await authController.register(registerDto);
+
+      expect(result).toEqual({
+        success: false,
+        data: null,
+        error: 'Wallet address already registered',
+      });
     });
   });
 
