@@ -12,6 +12,9 @@ import {
   AuthResponse,
   CreateApplicationRequest,
   Application,
+  Resume,
+  CreateResumeRequest,
+  UpdateResumeRequest,
 } from '@/types';
 
 // Android 模拟器：10.0.2.2, iOS 模拟器和 Web: localhost
@@ -425,4 +428,88 @@ export function isLoggedIn(): boolean {
 // 获取当前 token
 export function getCurrentToken(): string | null {
   return getToken();
+}
+
+// ==================== 简历相关 ====================
+
+// 获取我的简历
+export async function getMyResume(): Promise<ApiResponse<Resume>> {
+  try {
+    const response = await fetchWithAuth(`${API_BASE_URL}/resumes`);
+    return await handleResponse(response);
+  } catch (error) {
+    return {
+      success: false,
+      data: null,
+      error: 'Network error',
+    };
+  }
+}
+
+// 创建简历
+export async function createResume(
+  data: CreateResumeRequest
+): Promise<ApiResponse<Resume>> {
+  try {
+    const response = await fetchWithAuth(`${API_BASE_URL}/resumes`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    return await handleResponse(response);
+  } catch (error) {
+    return {
+      success: false,
+      data: null,
+      error: 'Network error',
+    };
+  }
+}
+
+// 更新简历
+export async function updateResume(
+  data: UpdateResumeRequest
+): Promise<ApiResponse<Resume>> {
+  try {
+    const response = await fetchWithAuth(`${API_BASE_URL}/resumes`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+    return await handleResponse(response);
+  } catch (error) {
+    return {
+      success: false,
+      data: null,
+      error: 'Network error',
+    };
+  }
+}
+
+// 删除简历
+export async function deleteResume(): Promise<ApiResponse<null>> {
+  try {
+    const response = await fetchWithAuth(`${API_BASE_URL}/resumes`, {
+      method: 'DELETE',
+    });
+    return await handleResponse(response);
+  } catch (error) {
+    return {
+      success: false,
+      data: null,
+      error: 'Network error',
+    };
+  }
+}
+
+// 获取公开简历
+export async function getPublicResume(userId: string): Promise<ApiResponse<Resume>> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/resumes/public/${userId}`);
+    return await handleResponse(response);
+  } catch (error) {
+    return {
+      success: false,
+      data: null,
+      error: 'Network error',
+    };
+  }
 }

@@ -4,6 +4,7 @@ import { useThemedColors } from '@/lib/useThemedColors';
 import { ProfileContent } from '@/components/profile/ProfileContent';
 import { LanguageSelector } from '@/components/profile/LanguageSelector';
 import { mockProfile } from '@/lib/constants';
+import { router } from 'expo-router';
 
 export default function ProfileScreen() {
   const colors = useThemedColors();
@@ -12,6 +13,8 @@ export default function ProfileScreen() {
   const handleMenuItemPress = (item: string) => {
     if (item === 'language') {
       setShowLanguageSelector(true);
+    } else if (item === 'resume') {
+      router.push('/resume');
     } else {
       console.log('Menu item pressed:', item);
     }

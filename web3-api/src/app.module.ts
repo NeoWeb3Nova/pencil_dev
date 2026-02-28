@@ -9,6 +9,7 @@ import { MessagesModule } from './messages/messages.module';
 import { ApplicationsModule } from './applications/applications.module';
 import { Web3Module } from './web3/web3.module';
 import { WalletProfilesModule } from './wallet-profiles/wallet-profiles.module';
+import { ResumesModule } from './resumes/resumes.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { WalletProfilesModule } from './wallet-profiles/wallet-profiles.module';
     ApplicationsModule,
     Web3Module,
     WalletProfilesModule,
+    ResumesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
