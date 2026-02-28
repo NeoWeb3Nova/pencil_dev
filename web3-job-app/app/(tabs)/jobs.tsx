@@ -4,8 +4,11 @@ import { JobCard } from '@/components/job/JobCard';
 import { colors, mockJobs } from '@/lib/constants';
 import { Job } from '@/types';
 import { useRouter } from 'expo-router';
+import { useAppStore } from '@/store/app-store';
+import { t } from '@/lib/i18n';
 
 export default function JobsScreen() {
+  const { language } = useAppStore();
   const router = useRouter();
 
   const handleJobPress = (job: Job) => {
@@ -13,12 +16,12 @@ export default function JobsScreen() {
   };
 
   const categories = [
-    { id: 'all', label: '全部' },
-    { id: 'solidity', label: '智能合约' },
-    { id: 'frontend', label: '前端' },
-    { id: 'backend', label: '后端' },
-    { id: 'defi', label: 'DeFi' },
-    { id: 'nft', label: 'NFT' },
+    { id: 'all', label: t('categoryAll', language) },
+    { id: 'solidity', label: t('categorySolidity', language) },
+    { id: 'frontend', label: t('categoryFrontend', language) },
+    { id: 'backend', label: t('categoryBackend', language) },
+    { id: 'defi', label: t('categoryDeFi', language) },
+    { id: 'nft', label: t('categoryNFT', language) },
   ];
 
   const [selectedCategory, setSelectedCategory] = React.useState('all');

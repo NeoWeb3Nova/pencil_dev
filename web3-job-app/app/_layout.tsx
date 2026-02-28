@@ -6,6 +6,8 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
+import { useAppStore } from '@/store/app-store';
+import { t } from '@/lib/i18n';
 
 export {
   ErrorBoundary,
@@ -52,6 +54,11 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const colorScheme = 'light' as 'light' | 'dark';
+  const { language, loadLanguage } = useAppStore();
+
+  useEffect(() => {
+    loadLanguage();
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -61,8 +68,8 @@ function RootLayoutNav() {
           <Stack.Screen
             name="job/[id]"
             options={{
-              title: '职位详情',
-              headerBackTitle: '返回',
+              title: t('jobDetails', language),
+              headerBackTitle: t('back', language),
             }}
           />
         </Stack>

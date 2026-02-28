@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-nati
 import { UserProfile } from '@/types';
 import { colors } from '@/lib/constants';
 import { Card } from '@/components/ui/Card';
+import { useAppStore } from '@/store/app-store';
+import { t } from '@/lib/i18n';
 
 interface ProfileContentProps {
   profile: UserProfile;
@@ -10,16 +12,18 @@ interface ProfileContentProps {
 }
 
 export function ProfileContent({ profile, onMenuItemPress }: ProfileContentProps) {
+  const { language } = useAppStore();
+
   const menuItems1 = [
-    { id: 'resume', label: '我的简历', icon: '📄' },
-    { id: 'saved', label: '保存的职位', icon: '🔖' },
-    { id: 'wallet', label: '钱包连接', icon: '💳' },
+    { id: 'resume', label: t('myResume', language), icon: '📄' },
+    { id: 'saved', label: t('savedJobs', language), icon: '🔖' },
+    { id: 'wallet', label: t('walletConnect', language), icon: '💳' },
   ];
 
   const menuItems2 = [
-    { id: 'darkmode', label: '深色模式', icon: '🌙' },
-    { id: 'language', label: '语言', value: '中文', icon: '🌍' },
-    { id: 'analytics', label: '数据统计', icon: '📊' },
+    { id: 'darkmode', label: t('darkMode', language), icon: '🌙' },
+    { id: 'language', label: t('language', language), value: language === 'zh' ? '中文' : 'English', icon: '🌍' },
+    { id: 'analytics', label: t('analytics', language), icon: '📊' },
   ];
 
   return (
@@ -37,15 +41,15 @@ export function ProfileContent({ profile, onMenuItemPress }: ProfileContentProps
       <View style={styles.statsRow}>
         <Card style={styles.statCard}>
           <Text style={styles.statNumber}>{profile.stats.applied}</Text>
-          <Text style={styles.statLabel}>已申请</Text>
+          <Text style={styles.statLabel}>{t('applied', language)}</Text>
         </Card>
         <Card style={styles.statCard}>
           <Text style={styles.statNumber}>{profile.stats.interviews}</Text>
-          <Text style={styles.statLabel}>面试</Text>
+          <Text style={styles.statLabel}>{t('interviews', language)}</Text>
         </Card>
         <Card style={styles.statCard}>
           <Text style={styles.statNumber}>{profile.stats.offers}</Text>
-          <Text style={styles.statLabel}>Offer</Text>
+          <Text style={styles.statLabel}>{t('offers', language)}</Text>
         </Card>
       </View>
 

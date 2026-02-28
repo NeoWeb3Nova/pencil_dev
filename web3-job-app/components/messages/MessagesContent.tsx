@@ -4,6 +4,8 @@ import { Message } from '@/types';
 import { colors } from '@/lib/constants';
 import { Card } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
+import { useAppStore } from '@/store/app-store';
+import { t } from '@/lib/i18n';
 
 interface MessagesContentProps {
   messages: Message[];
@@ -12,6 +14,7 @@ interface MessagesContentProps {
 }
 
 export function MessagesContent({ messages, onMessagePress, onSearch }: MessagesContentProps) {
+  const { language } = useAppStore();
   const [searchQuery, setSearchQuery] = React.useState('');
 
   return (
@@ -19,7 +22,7 @@ export function MessagesContent({ messages, onMessagePress, onSearch }: Messages
       {/* Search Bar */}
       <View style={styles.searchSection}>
         <Input
-          placeholder="搜索消息..."
+          placeholder={t('searchMessagesPlaceholder', language)}
           value={searchQuery}
           onChangeText={(text) => {
             setSearchQuery(text);

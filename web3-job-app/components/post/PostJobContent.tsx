@@ -3,12 +3,15 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-nati
 import { colors } from '@/lib/constants';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
+import { useAppStore } from '@/store/app-store';
+import { t } from '@/lib/i18n';
 
 interface PostJobContentProps {
   onSubmit?: (data: Record<string, unknown>) => void;
 }
 
 export function PostJobContent({ onSubmit }: PostJobContentProps) {
+  const { language } = useAppStore();
   const [formData, setFormData] = React.useState({
     title: '',
     company: '',
@@ -20,9 +23,9 @@ export function PostJobContent({ onSubmit }: PostJobContentProps) {
   });
 
   const jobTypes = [
-    { id: 'full-time', label: '全职' },
-    { id: 'contract', label: '合同' },
-    { id: 'part-time', label: '兼职' },
+    { id: 'full-time', label: t('jobTypeFullTime', language) },
+    { id: 'contract', label: t('jobTypeContract', language) },
+    { id: 'part-time', label: t('jobTypePartTime', language) },
   ];
 
   const handleSubmit = () => {
@@ -33,22 +36,22 @@ export function PostJobContent({ onSubmit }: PostJobContentProps) {
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View style={styles.form}>
         <Input
-          label="职位名称"
-          placeholder="高级 Solidity 工程师"
+          label={t('jobTitleLabel', language)}
+          placeholder={t('jobTitlePlaceholder', language)}
           value={formData.title}
           onChangeText={(text) => setFormData({ ...formData, title: text })}
         />
 
         <Input
-          label="公司名称"
-          placeholder="以太坊基金会"
+          label={t('companyLabel', language)}
+          placeholder={t('companyPlaceholder', language)}
           value={formData.company}
           onChangeText={(text) => setFormData({ ...formData, company: text })}
         />
 
         <Input
-          label="工作地点"
-          placeholder="远程 / 上海"
+          label={t('locationLabel', language)}
+          placeholder={t('locationPlaceholder', language)}
           value={formData.location}
           onChangeText={(text) => setFormData({ ...formData, location: text })}
         />
@@ -56,16 +59,16 @@ export function PostJobContent({ onSubmit }: PostJobContentProps) {
         <View style={styles.salaryRow}>
           <View style={styles.salaryInput}>
             <Input
-              label="最低薪资"
-              placeholder="$80K"
+              label={t('salaryMinLabel', language)}
+              placeholder={t('salaryMinPlaceholder', language)}
               value={formData.salaryMin}
               onChangeText={(text) => setFormData({ ...formData, salaryMin: text })}
             />
           </View>
           <View style={styles.salaryInput}>
             <Input
-              label="最高薪资"
-              placeholder="$180K"
+              label={t('salaryMaxLabel', language)}
+              placeholder={t('salaryMaxPlaceholder', language)}
               value={formData.salaryMax}
               onChangeText={(text) => setFormData({ ...formData, salaryMax: text })}
             />
@@ -73,7 +76,7 @@ export function PostJobContent({ onSubmit }: PostJobContentProps) {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionLabel}>工作类型</Text>
+          <Text style={styles.sectionLabel}>{t('jobTypeLabel', language)}</Text>
           <View style={styles.jobTypes}>
             {jobTypes.map((type) => (
               <TouchableOpacity
@@ -98,7 +101,7 @@ export function PostJobContent({ onSubmit }: PostJobContentProps) {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionLabel}>要求技能</Text>
+          <Text style={styles.sectionLabel}>{t('skillsLabel', language)}</Text>
           <View style={styles.skills}>
             {['Solidity', 'Web3.js', 'DeFi'].map((skill) => (
               <TouchableOpacity
@@ -128,7 +131,7 @@ export function PostJobContent({ onSubmit }: PostJobContentProps) {
         </View>
 
         <Button onPress={handleSubmit} size="lg" style={styles.submitButton}>
-          发布职位 - ¥299
+          {t('submitJob', language)}
         </Button>
       </View>
     </ScrollView>

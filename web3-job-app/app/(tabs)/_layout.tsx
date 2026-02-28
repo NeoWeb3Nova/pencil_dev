@@ -11,6 +11,8 @@ import {
   Search,
 } from 'lucide-react-native';
 import { colors } from '@/lib/constants';
+import { useAppStore } from '@/store/app-store';
+import { t } from '@/lib/i18n';
 
 function TabBarIcon({ icon, color, size = 24 }: { icon: React.ElementType; color: string; size?: number }) {
   const IconComponent = icon;
@@ -18,6 +20,8 @@ function TabBarIcon({ icon, color, size = 24 }: { icon: React.ElementType; color
 }
 
 export default function TabLayout() {
+  const { language } = useAppStore();
+
   return (
     <Tabs
       screenOptions={{
@@ -48,7 +52,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: '首页',
+          title: t('homeTitle', language),
           tabBarIcon: ({ color }) => <TabBarIcon icon={Home} color={color} />,
           headerRight: () => (
             <View style={{ flexDirection: 'row', gap: 16 }}>
@@ -65,25 +69,25 @@ export default function TabLayout() {
       <Tabs.Screen
         name="jobs"
         options={{
-          title: '职位',
+          title: t('jobsTitle', language),
           tabBarIcon: ({ color }) => <TabBarIcon icon={Briefcase} color={color} />,
-          headerTitle: '浏览职位',
+          headerTitle: t('browseJobs', language),
         }}
       />
       <Tabs.Screen
         name="post"
         options={{
-          title: '发布',
+          title: t('postTitle', language),
           tabBarIcon: ({ color }) => <TabBarIcon icon={PlusCircle} color={color} />,
-          headerTitle: '发布职位',
+          headerTitle: t('postJobTitle', language),
         }}
       />
       <Tabs.Screen
         name="messages"
         options={{
-          title: '消息',
+          title: t('messagesTitle', language),
           tabBarIcon: ({ color }) => <TabBarIcon icon={MessageSquare} color={color} />,
-          headerTitle: '消息',
+          headerTitle: t('messagesHeader', language),
           headerRight: () => (
             <View style={{ flexDirection: 'row', gap: 16 }}>
               <Pressable>
@@ -99,9 +103,9 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: '我的',
+          title: t('profileTitle', language),
           tabBarIcon: ({ color }) => <TabBarIcon icon={User} color={color} />,
-          headerTitle: '个人中心',
+          headerTitle: t('profileHeader', language),
         }}
       />
     </Tabs>

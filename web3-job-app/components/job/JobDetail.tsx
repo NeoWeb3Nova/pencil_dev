@@ -5,6 +5,8 @@ import { colors } from '@/lib/constants';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
+import { useAppStore } from '@/store/app-store';
+import { t } from '@/lib/i18n';
 
 interface JobDetailProps {
   job: Job;
@@ -12,6 +14,7 @@ interface JobDetailProps {
 }
 
 export function JobDetail({ job, onApply }: JobDetailProps) {
+  const { language } = useAppStore();
   const [isApplying, setIsApplying] = useState(false);
 
   const handleApply = async () => {
@@ -38,12 +41,12 @@ export function JobDetail({ job, onApply }: JobDetailProps) {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>职位描述</Text>
+          <Text style={styles.sectionTitle}>{t('jobDescription', language)}</Text>
           <Text style={styles.description}>{job.description}</Text>
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>职位要求</Text>
+          <Text style={styles.sectionTitle}>{t('jobRequirements', language)}</Text>
           {job.requirements.map((req, index) => (
             <View key={index} style={styles.requirement}>
               <Text style={styles.checkmark}>✓</Text>
@@ -53,7 +56,7 @@ export function JobDetail({ job, onApply }: JobDetailProps) {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>技能标签</Text>
+          <Text style={styles.sectionTitle}>{t('skillsTags', language)}</Text>
           <View style={styles.skills}>
             {job.skills.map((skill) => (
               <Badge key={skill} variant="default" size="md">
@@ -70,7 +73,7 @@ export function JobDetail({ job, onApply }: JobDetailProps) {
             size="lg"
             style={styles.applyButton}
           >
-            立即申请
+            {t('applyNow', language)}
           </Button>
         </View>
       </Card>

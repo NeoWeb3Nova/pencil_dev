@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-nati
 import { colors, mockJobs } from '@/lib/constants';
 import { JobCard } from '@/components/job/JobCard';
 import { Input } from '@/components/ui/Input';
+import { useAppStore } from '@/store/app-store';
+import { t } from '@/lib/i18n';
 
 interface HomeContentProps {
   onJobPress?: (job: typeof mockJobs[0]) => void;
@@ -10,13 +12,14 @@ interface HomeContentProps {
 }
 
 export function HomeContent({ onJobPress, onSearch }: HomeContentProps) {
+  const { language } = useAppStore();
   const [searchQuery, setSearchQuery] = React.useState('');
 
   const categories = [
-    { id: 'all', label: '全部职位' },
-    { id: 'solidity', label: '智能合约' },
-    { id: 'frontend', label: '前端' },
-    { id: 'defi', label: 'DeFi' },
+    { id: 'all', label: t('categoryAll', language) },
+    { id: 'solidity', label: t('categorySolidity', language) },
+    { id: 'frontend', label: t('categoryFrontend', language) },
+    { id: 'defi', label: t('categoryDeFi', language) },
   ];
   const [selectedCategory, setSelectedCategory] = React.useState('all');
 
@@ -24,15 +27,15 @@ export function HomeContent({ onJobPress, onSearch }: HomeContentProps) {
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Hero Banner */}
       <View style={styles.heroBanner}>
-        <Text style={styles.heroTitle}>🚀 加入 Ethereum Foundation</Text>
-        <Text style={styles.heroSubtitle}>构建去中心化的未来</Text>
+        <Text style={styles.heroTitle}>{t('heroTitle', language)}</Text>
+        <Text style={styles.heroSubtitle}>{t('heroSubtitle', language)}</Text>
       </View>
 
       {/* Search Section */}
       <View style={styles.section}>
-        <Text style={styles.sectionLabel}>搜索</Text>
+        <Text style={styles.sectionLabel}>{t('searchLabel', language)}</Text>
         <Input
-          placeholder="Web3、智能合约..."
+          placeholder={t('searchPlaceholder', language)}
           value={searchQuery}
           onChangeText={setSearchQuery}
           leftIcon={null}
@@ -65,8 +68,8 @@ export function HomeContent({ onJobPress, onSearch }: HomeContentProps) {
       {/* Recommended Jobs */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>推荐职位</Text>
-          <Text style={styles.viewAll}>查看全部</Text>
+          <Text style={styles.sectionTitle}>{t('recommendedJobs', language)}</Text>
+          <Text style={styles.viewAll}>{t('viewAll', language)}</Text>
         </View>
         {mockJobs.map((job) => (
           <JobCard key={job.id} job={job} onPress={() => onJobPress?.(job)} />

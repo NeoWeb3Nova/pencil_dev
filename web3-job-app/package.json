@@ -11,6 +11,7 @@
   "dependencies": {
     "@expo/metro-runtime": "~55.0.6",
     "@expo/vector-icons": "^15.0.2",
+    "@react-native-async-storage/async-storage": "^3.0.1",
     "@react-navigation/bottom-tabs": "^7.15.2",
     "@react-navigation/native": "^7.1.31",
     "@react-navigation/stack": "^7.8.2",
@@ -21,6 +22,7 @@
     "expo-font": "~55.0.4",
     "expo-linking": "~55.0.7",
     "expo-router": "~55.0.3",
+    "expo-secure-store": "^55.0.8",
     "expo-splash-screen": "~55.0.10",
     "expo-status-bar": "~55.0.4",
     "expo-web-browser": "~55.0.9",
