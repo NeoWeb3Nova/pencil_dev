@@ -5,6 +5,7 @@ import { colors } from '@/lib/constants';
 import { Card } from '@/components/ui/Card';
 import { useAppStore } from '@/store/app-store';
 import { t } from '@/lib/i18n';
+import { ThemeToggle } from '@/components/profile/ThemeToggle';
 
 interface ProfileContentProps {
   profile: UserProfile;
@@ -21,7 +22,6 @@ export function ProfileContent({ profile, onMenuItemPress }: ProfileContentProps
   ];
 
   const menuItems2 = [
-    { id: 'darkmode', label: t('darkMode', language), icon: '🌙' },
     { id: 'language', label: t('language', language), value: language === 'zh' ? '中文' : 'English', icon: '🌍' },
     { id: 'analytics', label: t('analytics', language), icon: '📊' },
   ];
@@ -86,6 +86,11 @@ export function ProfileContent({ profile, onMenuItemPress }: ProfileContentProps
             <Text style={styles.chevron}>›</Text>
           </TouchableOpacity>
         ))}
+      </Card>
+
+      {/* Theme Toggle */}
+      <Card style={styles.menuCard}>
+        <ThemeToggle />
       </Card>
     </ScrollView>
   );

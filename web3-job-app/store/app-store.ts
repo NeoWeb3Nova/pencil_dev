@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { getStoredLanguage, saveLanguagePreference } from '@/lib/storage';
+import { getStoredLanguage, saveLanguagePreference, getStoredTheme, saveThemePreference } from '@/lib/storage';
 
 interface AppState {
   // 用户相关
@@ -13,6 +13,9 @@ interface AppState {
   // 语言设置
   language: 'zh' | 'en';
 
+  // 主题设置
+  themeMode: 'light' | 'dark';
+
   // 动作
   login: () => void;
   logout: () => void;
@@ -21,6 +24,9 @@ interface AppState {
   setLanguage: (language: 'zh' | 'en') => void;
   loadLanguage: () => Promise<void>;
   saveLanguage: (language: 'zh' | 'en') => Promise<void>;
+  setThemeMode: (theme: 'light' | 'dark') => Promise<void>;
+  loadTheme: () => Promise<void>;
+  saveTheme: (theme: 'light' | 'dark') => Promise<void>;
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -29,6 +35,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   searchQuery: '',
   selectedCategory: '',
   language: 'zh',
+  themeMode: 'light',
 
   login: () => set({ isLoggedIn: true, userId: 'user-1' }),
   logout: () => set({ isLoggedIn: false, userId: null }),
@@ -44,5 +51,19 @@ export const useAppStore = create<AppState>((set, get) => ({
   saveLanguage: async (language: 'zh' | 'en') => {
     set({ language });
     await saveLanguagePreference(language);
+  },
+  setThemeMode: async (theme: 'light' | 'dark') => {
+    set({ themeMode: theme });
+    await saveThemePreference(theme);
+  },
+  loadTheme: async () => {
+    const storedTheme = await getStoredTheme();
+    if (storedTheme === 'light' || storedTheme === 'dark') {
+      set({ themeMode: storedTheme });
+    }
+  },
+  saveTheme: async (theme: 'light' | 'dark') => {
+    set({ themeMode: theme });
+    await saveThemePreference(theme);
   },
 }));

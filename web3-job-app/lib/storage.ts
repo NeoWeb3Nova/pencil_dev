@@ -1,6 +1,7 @@
 import * as SecureStore from 'expo-secure-store';
 
 const LANGUAGE_KEY = 'web3_job_app_language';
+const THEME_KEY = 'web3_job_app_theme';
 
 // 检测是否在 Web 环境
 const isWeb = typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
@@ -21,5 +22,27 @@ export async function saveLanguagePreference(language: string): Promise<void> {
     await SecureStore.setItemAsync(LANGUAGE_KEY, language);
   } catch (error) {
     console.error('Failed to save language preference:', error);
+  }
+}
+
+// Theme storage functions
+export async function getStoredTheme(): Promise<'light' | 'dark' | null> {
+  try {
+    const theme = await SecureStore.getItemAsync(THEME_KEY);
+    if (theme === 'light' || theme === 'dark') {
+      return theme;
+    }
+    return null;
+  } catch (error) {
+    console.error('Failed to get stored theme:', error);
+    return null;
+  }
+}
+
+export async function saveThemePreference(theme: 'light' | 'dark'): Promise<void> {
+  try {
+    await SecureStore.setItemAsync(THEME_KEY, theme);
+  } catch (error) {
+    console.error('Failed to save theme preference:', error);
   }
 }

@@ -9,8 +9,13 @@ export const colors = {
   secondary: '#71717A',
   muted: '#A1A1AA',
   border: '#E4E4E7',
+  borderDark: '#3F3F46',
   background: '#FAFAFA',
+  backgroundDark: '#18181B',
   card: '#FFFFFF',
+  cardDark: '#27272A',
+  text: '#18181B',
+  textDark: '#F4F4F5',
   white: '#FFFFFF',
   gray100: '#F4F4F5',
   gray200: '#E4E4E7',
@@ -21,6 +26,14 @@ export const colors = {
   gray700: '#3F3F46',
   gray800: '#27272A',
   gray900: '#18181B',
+};
+
+// 深色模式颜色映射
+export const darkColors = {
+  border: colors.borderDark,
+  background: colors.backgroundDark,
+  card: colors.cardDark,
+  text: colors.textDark,
 };
 
 export const spacing = {

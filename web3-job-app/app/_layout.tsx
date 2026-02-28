@@ -53,16 +53,16 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-  const colorScheme = 'light' as 'light' | 'dark';
-  const { language, loadLanguage } = useAppStore();
+  const { language, loadLanguage, themeMode, loadTheme } = useAppStore();
 
   useEffect(() => {
     loadLanguage();
+    loadTheme();
   }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <ThemeProvider value={themeMode === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen
