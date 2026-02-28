@@ -84,6 +84,11 @@ export class JobsService {
     return this.prisma.job.create({
       data: {
         ...createJobDto,
+        // 确保 salary 字段为数字类型
+        salaryMin: createJobDto.salaryMin ?? null,
+        salaryMax: createJobDto.salaryMax ?? null,
+        // 默认状态为 DRAFT
+        status: createJobDto.status ?? JobStatus.DRAFT,
         postedById: userId,
       },
       include: {

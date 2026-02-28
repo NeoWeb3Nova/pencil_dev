@@ -15,6 +15,7 @@ import {
   Resume,
   CreateResumeRequest,
   UpdateResumeRequest,
+  CreateJobRequest,
 } from '@/types';
 
 // Android 模拟器：10.0.2.2, iOS 模拟器和 Web: localhost
@@ -214,8 +215,17 @@ export async function getJobById(id: string): Promise<ApiResponse<Job>> {
 }
 
 // 发布职位
-export async function postJob(data: Partial<Job>): Promise<ApiResponse<{ id: string }>> {
+export async function postJob(data: CreateJobRequest): Promise<ApiResponse<{ id: string }>> {
   try {
+    // 前端类型映射到后端枚举
+    const typeMapping: Record<string, string> = {
+      'full-time': 'FULL_TIME',
+      'contract': 'CONTRACT',
+      'part-time': 'PART_TIME',
+      'freelance': 'FREELANCE',
+      'internship': 'INTERNSHIP',
+    };
+
     const jobData = {
       title: data.title,
       company: data.company,
@@ -225,7 +235,7 @@ export async function postJob(data: Partial<Job>): Promise<ApiResponse<{ id: str
       description: data.description,
       requirements: data.requirements,
       skills: data.skills,
-      type: data.type || 'FULL_TIME',
+      type: data.type ? typeMapping[data.type] : 'FULL_TIME',
     };
 
     const response = await fetchWithAuth(`${API_BASE_URL}/jobs`, {

@@ -11,9 +11,9 @@ export interface Job {
   requirements: string[];
   skills: string[];
   logo?: string;
-  type: 'full-time' | 'contract' | 'part-time';
+  type: 'FULL_TIME' | 'CONTRACT' | 'PART_TIME' | 'FREELANCE' | 'INTERNSHIP';
   postedAt: string;
-  status?: 'draft' | 'published' | 'closed';
+  status?: 'DRAFT' | 'PUBLISHED' | 'CLOSED';
   postedBy?: {
     id: string;
     name: string;
@@ -21,6 +21,19 @@ export interface Job {
   };
   createdAt?: string;
   updatedAt?: string;
+}
+
+// 发布职位请求类型
+export interface CreateJobRequest {
+  title: string;
+  company: string;
+  location: string;
+  salaryMin?: number;
+  salaryMax?: number;
+  description: string;
+  requirements?: string[];
+  skills?: string[];
+  type?: 'FULL_TIME' | 'CONTRACT' | 'PART_TIME' | 'FREELANCE' | 'INTERNSHIP';
 }
 
 // 消息类型定义
