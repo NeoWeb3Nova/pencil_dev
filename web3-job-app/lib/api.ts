@@ -1,5 +1,6 @@
 // API 服务 - 连接真实后端 API
 // 后端地址：http://localhost:3000/api
+// Android 模拟器使用 10.0.2.2 访问主机，iOS 模拟器使用 localhost
 
 import {
   Job,
@@ -13,7 +14,8 @@ import {
   Application,
 } from '@/types';
 
-const API_BASE_URL = 'http://localhost:3000/api';
+// Android 模拟器：10.0.2.2, iOS 模拟器和 Web: localhost
+const API_BASE_URL = 'http://10.0.2.2:3000/api';
 
 // 获取存储的 token
 const getToken = (): string | null => {
