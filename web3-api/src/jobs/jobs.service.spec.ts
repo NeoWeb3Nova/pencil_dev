@@ -170,8 +170,14 @@ describe('JobsService', () => {
       description: 'Job description',
     };
 
-    it('should create a new job', async () => {
-      const createdJob = { ...mockJob, ...createJobDto };
+    it('should create a new job with default status DRAFT', async () => {
+      const createdJob = {
+        ...mockJob,
+        ...createJobDto,
+        status: JobStatus.DRAFT,
+        salaryMin: null,
+        salaryMax: null,
+      };
       mockPrismaService.job.create.mockResolvedValue(createdJob);
 
       const result = await jobsService.create('user1', createJobDto);
@@ -179,6 +185,9 @@ describe('JobsService', () => {
       expect(prismaService.job.create).toHaveBeenCalledWith({
         data: {
           ...createJobDto,
+          salaryMin: null,
+          salaryMax: null,
+          status: JobStatus.DRAFT,
           postedById: 'user1',
         },
         include: {
@@ -188,6 +197,34 @@ describe('JobsService', () => {
         },
       });
       expect(result).toEqual(createdJob);
+    });
+
+    it('should create a new job with custom status if provided', async () => {
+      const createJobDtoWithStatus = {
+        ...createJobDto,
+        status: JobStatus.PUBLISHED,
+        salaryMin: 80000,
+        salaryMax: 120000,
+      };
+      const createdJob = { ...mockJob, ...createJobDtoWithStatus };
+      mockPrismaService.job.create.mockResolvedValue(createdJob);
+
+      await jobsService.create('user1', createJobDtoWithStatus);
+
+      expect(prismaService.job.create).toHaveBeenCalledWith({
+        data: {
+          ...createJobDtoWithStatus,
+          salaryMin: 80000,
+          salaryMax: 120000,
+          status: JobStatus.PUBLISHED,
+          postedById: 'user1',
+        },
+        include: {
+          postedBy: {
+            select: { id: true, name: true, email: true },
+          },
+        },
+      });
     });
   });
 

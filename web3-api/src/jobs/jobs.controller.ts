@@ -9,6 +9,9 @@ import {
   Query,
   UseGuards,
   Request,
+  HttpStatus,
+  HttpException,
+  BadRequestException,
 } from '@nestjs/common';
 import { JobsService } from './jobs.service';
 import { CreateJobDto, UpdateJobDto } from './dto/job.dto';
@@ -52,11 +55,28 @@ export class JobsController {
   @UseGuards(JwtAuthGuard)
   @Post()
   async create(@Request() req: any, @Body() createJobDto: CreateJobDto) {
-    const job = await this.jobsService.create(req.user.userId, createJobDto);
-    return {
-      success: true,
-      data: job,
-    };
+    try {
+      // 验证薪资范围
+      if (createJobDto.salaryMin !== undefined && createJobDto.salaryMax !== undefined) {
+        if (createJobDto.salaryMin > createJobDto.salaryMax) {
+          throw new BadRequestException('Minimum salary cannot be greater than maximum salary');
+        }
+      }
+
+      const job = await this.jobsService.create(req.user.userId, createJobDto);
+      return {
+        success: true,
+        data: job,
+      };
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+      throw new HttpException(
+        'Failed to create job posting',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @UseGuards(JwtAuthGuard)
