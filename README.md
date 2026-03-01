@@ -26,23 +26,15 @@
 
 ## 📱 应用预览
 
-<p align="center">
-  <strong>🏠 首页推荐</strong>
-  <br/><br/>
-  <img src="assets/Screenshot_1772335440.png" width="180" alt="首页"/>
-</p>
-
 <div align="center">
 
-| 首页推荐 | 职位列表 | 发布职位 |
+| 🏠 首页 | 💼 职位列表 | 📝 发布职位 |
 |:---:|:---:|:---:|
-| <img src="assets/Screenshot_1772335440.png" width="160" alt="首页"/> | <img src="assets/Screenshot_1772335446.png" width="160" alt="职位列表"/> | <img src="assets/Screenshot_1772335435.png" width="160" alt="发布职位"/> |
-| 智能推荐职位 | 筛选与搜索 | 一键发布 |
+| <img src="assets/Screenshot_1772335435.png" width="160" alt="首页"/> | <img src="assets/Screenshot_1772335440.png" width="160" alt="职位列表"/> | <img src="assets/Screenshot_1772335446.png" width="160" alt="发布职位"/> |
 
-| 消息中心 | 个人中心 | 用户注册 |
+| 💬 消息 | 👤 个人中心 | 📝 注册 |
 |:---:|:---:|:---:|
-| <img src="assets/Screenshot_1772335451.png" width="160" alt="消息中心"/> | <img src="assets/Screenshot_1772335448.png" width="160" alt="个人中心"/> | <img src="assets/Screenshot_1772335471.png" width="160" alt="用户注册"/> |
-| 实时通讯 | 申请追踪 | 快速注册 |
+| <img src="assets/Screenshot_1772335448.png" width="160" alt="消息"/> | <img src="assets/Screenshot_1772335451.png" width="160" alt="个人中心"/> | <img src="assets/Screenshot_1772335471.png" width="160" alt="注册"/> |
 
 </div>
 
