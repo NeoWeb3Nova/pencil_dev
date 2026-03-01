@@ -66,6 +66,33 @@ npm run prisma:migrate        # 运行迁移
 
 ---
 
+### 4. SecureStore 密钥格式错误
+
+**现象**:
+```
+Invalid key provided to SecureStore. Keys must not be empty and contain only alphanumeric characters, ".", "-", and "_".
+```
+
+**原因**: Expo SecureStore 的密钥只能包含字母数字、`.`、`-`、`_`
+
+**错误示例**:
+```typescript
+const TOKEN_KEY = '@web3job:token';  // ❌ 包含 @ 和 :
+const USER_KEY = '@web3job:user';    // ❌ 包含 @ 和 :
+```
+
+**正确示例**:
+```typescript
+const TOKEN_KEY = 'web3job.token';   // ✅ 使用 . 代替 @ 和 :
+const USER_KEY = 'web3job.user';     // ✅ 使用 . 代替 @ 和 :
+```
+
+**已修复文件**:
+- `web3-job-app/store/authStore.ts`
+- `web3-job-app/lib/api.ts`
+
+---
+
 ## 快速启动命令
 
 ```bash

@@ -3,8 +3,8 @@ import * as SecureStore from 'expo-secure-store';
 import { login as apiLogin, logout as apiLogout, getProfile } from '@/lib/api';
 import type { LoginRequest, UserProfile } from '@/types';
 
-const TOKEN_KEY = '@web3job:token';
-const USER_KEY = '@web3job:user';
+const TOKEN_KEY = 'web3job.token';
+const USER_KEY = 'web3job.user';
 
 interface AuthState {
   // 认证状态

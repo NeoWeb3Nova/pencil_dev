@@ -37,7 +37,7 @@ const API_BASE_URL = getApiBaseUrl();
 // 获取存储的 token
 const getToken = async (): Promise<string | null> => {
   try {
-    return await SecureStore.getItemAsync('@web3job:token');
+    return await SecureStore.getItemAsync('web3job.token');
   } catch {
     return null;
   }
@@ -46,7 +46,7 @@ const getToken = async (): Promise<string | null> => {
 // 存储 token
 const setToken = async (token: string): Promise<void> => {
   try {
-    await SecureStore.setItemAsync('@web3job:token', token);
+    await SecureStore.setItemAsync('web3job.token', token);
   } catch {
     // 处理错误
   }
@@ -55,7 +55,7 @@ const setToken = async (token: string): Promise<void> => {
 // 清除 token
 const clearToken = async (): Promise<void> => {
   try {
-    await SecureStore.deleteItemAsync('@web3job:token');
+    await SecureStore.deleteItemAsync('web3job.token');
   } catch {
     // 处理错误
   }
