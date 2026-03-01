@@ -148,3 +148,78 @@ JWT_EXPIRATION="7d"
 
 ### Frontend
 Update `lib/api.ts` if backend URL changes from default `http://localhost:3000`.
+
+---
+
+## Common Errors & Solutions (常见错误与解决方案)
+
+### 1. Frontend Network Error ("Network error")
+
+**Problem**: App cannot connect to backend API
+
+**Cause**: Android emulator's `localhost` points to the emulator itself, not the host machine
+
+**Solution** - Already fixed in `lib/api.ts`:
+```typescript
+const getApiBaseUrl = () => {
+  if (Platform.OS === 'android') {
+    return 'http://10.0.2.2:3000/api';  // Android emulator
+  }
+  return 'http://localhost:3000/api';   // iOS/Web
+};
+```
+
+**Verify backend is running**:
+```bash
+netstat -ano | findstr ":3000"
+curl http://localhost:3000/api/auth/login
+```
+
+### 2. React Hooks "Cannot access before initialization"
+
+**Problem**: `ReferenceError: Cannot access 'formatDate' before initialization`
+
+**Cause**: `const` arrow functions are not hoisted. Helper functions used in hooks callbacks must be defined BEFORE the hooks.
+
+**Wrong pattern**:
+```typescript
+// ❌ WRONG
+const { data } = useQuery({ select: (d) => formatDate(d.date) });
+const formatDate = () => { ... };
+```
+
+**Correct pattern**:
+```typescript
+// ✅ CORRECT
+const formatDate = () => { ... };  // Define first
+const { data } = useQuery({ select: (d) => formatDate(d.date) });
+```
+
+**Rule**: All helper functions used in hooks callbacks MUST be defined before the hooks.
+
+### 3. Prisma Database Connection Failed
+
+**Problem**: `PrismaClientInitializationError`
+
+**Solution**:
+```bash
+cd web3-api
+docker-compose up -d          # Start database
+npm run prisma:generate       # Generate Prisma Client
+npm run prisma:migrate        # Run migrations
+```
+
+---
+
+## Quick Start Commands
+
+```bash
+# 1. Start database
+cd web3-api && docker-compose up -d
+
+# 2. Start backend (new terminal)
+cd web3-api && npm run start:dev
+
+# 3. Start frontend (new terminal)
+cd web3-job-app && npm start
+```

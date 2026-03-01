@@ -1,5 +1,86 @@
 # Web3 Job App - 开发环境配置
 
+## 常见错误与解决方案 (FAQ)
+
+### 1. 前端网络错误 "Network error"
+
+**现象**: 应用显示无法连接到后端 API
+
+**原因**: Android 模拟器的 `localhost` 指向模拟器本身，不是宿主机
+
+**解决**:
+```typescript
+// lib/api.ts 已修复 - 根据平台自动选择 API 地址
+const getApiBaseUrl = () => {
+  if (Platform.OS === 'android') {
+    return 'http://10.0.2.2:3000/api';  // Android 模拟器
+  }
+  return 'http://localhost:3000/api';   // iOS/Web
+};
+```
+
+**检查**:
+```bash
+# 确认后端运行中
+netstat -ano | findstr ":3000"
+curl http://localhost:3000/api/auth/login
+```
+
+---
+
+### 2. React Hooks 函数未定义错误
+
+**现象**: `Cannot access 'xxx' before initialization`
+
+**原因**: `const` 箭头函数不会提升，在 hooks 回调中使用前必须先定义
+
+**错误模式**:
+```typescript
+// ❌ 错误
+const { data } = useQuery({ select: (d) => formatDate(d.date) });
+const formatDate = () => { ... };
+```
+
+**正确模式**:
+```typescript
+// ✅ 正确
+const formatDate = () => { ... };  // 先定义
+const { data } = useQuery({ select: (d) => formatDate(d.date) });
+```
+
+**规则**: 所有在 hooks 回调中使用的辅助函数，必须在 hooks 之前定义。
+
+---
+
+### 3. Prisma 数据库连接失败
+
+**现象**: `PrismaClientInitializationError`
+
+**解决**:
+```bash
+cd web3-api
+docker-compose up -d          # 启动数据库
+npm run prisma:generate       # 生成 Prisma Client
+npm run prisma:migrate        # 运行迁移
+```
+
+---
+
+## 快速启动命令
+
+```bash
+# 1. 启动数据库
+cd web3-api && docker-compose up -d
+
+# 2. 启动后端 (新终端)
+cd web3-api && npm run start:dev
+
+# 3. 启动前端 (新终端)
+cd web3-job-app && npm start
+```
+
+---
+
 ## Android 环境变量配置
 
 ### 问题说明
