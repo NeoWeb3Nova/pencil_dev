@@ -9,11 +9,14 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       'http://localhost:8081',
+      'http://localhost:19000',
       'http://localhost:19006',
       'exp://localhost:19000',
       'http://10.0.2.2:8081',  // Android emulator
+      'http://10.0.2.2:19000', // Android emulator
       'http://10.0.2.2:19006', // Android emulator
       'exp://10.0.2.2:19000',  // Android emulator
+      'exp://192.168.',        // Android on physical device
     ],
     credentials: true,
   });

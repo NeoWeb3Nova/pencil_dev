@@ -22,8 +22,22 @@ export class ResumesService {
     return this.prisma.resume.create({
       data: {
         userId,
-        ...createResumeDto,
+        fullName: createResumeDto.fullName,
+        title: createResumeDto.title,
+        summary: createResumeDto.summary,
+        email: createResumeDto.email,
+        phone: createResumeDto.phone,
+        location: createResumeDto.location,
+        website: createResumeDto.website,
+        linkedinUrl: createResumeDto.linkedinUrl,
+        githubUrl: createResumeDto.githubUrl,
+        experiences: createResumeDto.experiences as any,
+        education: createResumeDto.education as any,
         skills: createResumeDto.skills || [],
+        projects: createResumeDto.projects as any,
+        certifications: createResumeDto.certifications as any,
+        languages: createResumeDto.languages as any,
+        isPublic: createResumeDto.isPublic,
       },
     });
   }
@@ -43,7 +57,24 @@ export class ResumesService {
 
     return this.prisma.resume.update({
       where: { userId },
-      data: updateResumeDto,
+      data: {
+        fullName: updateResumeDto.fullName,
+        title: updateResumeDto.title,
+        summary: updateResumeDto.summary,
+        email: updateResumeDto.email,
+        phone: updateResumeDto.phone,
+        location: updateResumeDto.location,
+        website: updateResumeDto.website,
+        linkedinUrl: updateResumeDto.linkedinUrl,
+        githubUrl: updateResumeDto.githubUrl,
+        experiences: updateResumeDto.experiences as any,
+        education: updateResumeDto.education as any,
+        skills: updateResumeDto.skills,
+        projects: updateResumeDto.projects as any,
+        certifications: updateResumeDto.certifications as any,
+        languages: updateResumeDto.languages as any,
+        isPublic: updateResumeDto.isPublic,
+      },
     });
   }
 

@@ -93,6 +93,35 @@ const USER_KEY = 'web3job.user';     // ✅ 使用 . 代替 @ 和 :
 
 ---
 
+### 5. React Native 渲染错误："Text strings must be rendered within a <Text> component"
+
+**现象**:
+```
+ReactNativeJS: 'Text strings must be rendered within a <Text> component.'
+```
+
+**原因**: 在 React Native 中，所有文本内容必须包裹在 `<Text>` 组件中，不能直接渲染字符串。
+
+**错误模式**:
+```tsx
+// ❌ 错误 - 直接渲染字符串
+<View>
+  {someCondition && 'Some text'}
+</View>
+```
+
+**正确模式**:
+```tsx
+// ✅ 正确 - 包裹在 Text 组件中
+<View>
+  {someCondition && <Text>Some text</Text>}
+</View>
+```
+
+**检查位置**: 通常在堆栈导航、条件渲染或组件 props 传递时容易出现此问题。
+
+---
+
 ## 快速启动命令
 
 ```bash

@@ -209,6 +209,33 @@ npm run prisma:generate       # Generate Prisma Client
 npm run prisma:migrate        # Run migrations
 ```
 
+### 4. SecureStore Invalid Key Error
+
+**Problem**:
+```
+Invalid key provided to SecureStore. Keys must not be empty and contain only alphanumeric characters, ".", "-", and "_".
+```
+
+**Cause**: SecureStore keys contain invalid characters (`@` and `:`)
+
+**Wrong pattern**:
+```typescript
+// ❌ WRONG
+const TOKEN_KEY = '@web3job:token';  // Contains @ and :
+const USER_KEY = '@web3job:user';    // Contains @ and :
+```
+
+**Correct pattern**:
+```typescript
+// ✅ CORRECT
+const TOKEN_KEY = 'web3job.token';   // Use . instead of @ and :
+const USER_KEY = 'web3job.user';     // Use . instead of @ and :
+```
+
+**Fixed files**:
+- `web3-job-app/store/authStore.ts`
+- `web3-job-app/lib/api.ts`
+
 ---
 
 ## Quick Start Commands

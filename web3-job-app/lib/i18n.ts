@@ -105,6 +105,16 @@ export const translations = {
     notifications: '消息通知',
     notificationsDesc: '获取最新的职位通知',
     resumeDesc: '管理您的在线简历',
+
+    // 通用
+    loading: '加载中...',
+    error: '错误',
+    retry: '重试',
+    noJobs: '暂无职位',
+    today: '今天',
+    yesterday: '昨天',
+    daysAgo: '天前',
+    unknown: '未知',
   },
   en: {
     // Profile
@@ -211,6 +221,16 @@ export const translations = {
     notifications: 'Notifications',
     notificationsDesc: 'Get the latest job notifications',
     resumeDesc: 'Manage your online resume',
+
+    // Common
+    loading: 'Loading...',
+    error: 'Error',
+    retry: 'Retry',
+    noJobs: 'No jobs available',
+    today: 'Today',
+    yesterday: 'Yesterday',
+    daysAgo: ' days ago',
+    unknown: 'Unknown',
   },
 };
 
@@ -222,7 +242,8 @@ export type TranslationKey = keyof typeof translations.zh |
   'forgotPassword' | 'loginSuccess' | 'loginFailed' | 'loginError' |
   'welcomeBack' | 'loginToExplore' | 'postJobs' | 'postJobsDesc' |
   'messaging' | 'messagingDesc' | 'notifications' | 'notificationsDesc' |
-  'resumeDesc';
+  'resumeDesc' | 'loading' | 'error' | 'retry' | 'noJobs' | 'today' |
+  'yesterday' | 'daysAgo' | 'unknown';
 
 export function t(key: TranslationKey, lang: Language): string {
   return (translations[lang] as any)[key] || translations.zh[key as keyof typeof translations.zh] || key;
