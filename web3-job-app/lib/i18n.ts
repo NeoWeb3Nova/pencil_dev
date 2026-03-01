@@ -107,6 +107,11 @@ export const translations = {
     toLogin: '去登录',
     logout: '登出',
     forgotPassword: '忘记密码？',
+    // 登录页面
+    loginAgree: '登录即表示您同意',
+    termsOfService: '服务条款',
+    and: '和',
+    privacyPolicy: '隐私政策',
     // 表单验证
     invalidEmail: '请输入有效的邮箱地址',
     passwordTooShort: '密码长度至少为 6 位',
@@ -238,6 +243,11 @@ export const translations = {
     toLogin: 'Login',
     logout: 'Logout',
     forgotPassword: 'Forgot password?',
+    // Login page
+    loginAgree: 'By logging in you agree to our',
+    termsOfService: 'Terms of Service',
+    and: 'and',
+    privacyPolicy: 'Privacy Policy',
     // Form Validation
     invalidEmail: 'Please enter a valid email address',
     passwordTooShort: 'Password must be at least 6 characters',
@@ -277,7 +287,8 @@ export type TranslationKey = keyof typeof translations.zh |
   'register' | 'registerTitle' | 'registerDesc' | 'name' | 'namePlaceholder' |
   'confirmPassword' | 'confirmPasswordPlaceholder' | 'registerButton' |
   'registerSuccess' | 'registerFailed' | 'invalidEmail' | 'passwordTooShort' |
-  'passwordMismatch' | 'emailExists' | 'networkError';
+  'passwordMismatch' | 'emailExists' | 'networkError' |
+  'loginAgree' | 'termsOfService' | 'and' | 'privacyPolicy';
 
 export function t(key: TranslationKey, lang: Language): string {
   return (translations[lang] as any)[key] || translations.zh[key as keyof typeof translations.zh] || key;

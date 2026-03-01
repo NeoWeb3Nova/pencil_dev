@@ -47,7 +47,8 @@ export default function ProfileScreen() {
   };
 
   const handleLoginPress = () => {
-    router.push('/login');
+    // 传递 returnUrl，登录成功后返回 profile 页面
+    router.push('/login?returnUrl=/profile');
   };
 
   // 显示加载状态

@@ -11,7 +11,7 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useAuthStore } from '@/store/authStore';
 import { useThemedColors } from '@/lib/useThemedColors';
 import { t } from '@/lib/i18n';
@@ -21,6 +21,7 @@ export default function LoginScreen() {
   const colors = useThemedColors();
   const { login, isLoading } = useAuthStore();
   const [language, setLanguage] = useState<'zh' | 'en'>('zh');
+  const params = useLocalSearchParams();
 
   // 表单状态
   const [email, setEmail] = useState('');
@@ -60,7 +61,17 @@ export default function LoginScreen() {
       Alert.alert(
         t('loginSuccess', language),
         t('welcomeBack', language),
-        [{ text: 'OK', onPress: () => router.back() }]
+        [{
+          text: 'OK',
+          onPress: () => {
+            // 如果有 returnUrl 参数，跳转到指定页面；否则返回上一页
+            if (params.returnUrl) {
+              router.push(params.returnUrl as string);
+            } else {
+              router.back();
+            }
+          }
+        }]
       );
     } else {
       Alert.alert(t('loginFailed', language), result.error || t('loginError', language));

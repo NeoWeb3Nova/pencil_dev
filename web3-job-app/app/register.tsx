@@ -9,8 +9,8 @@ export default function RegisterScreen() {
   const router = useRouter();
 
   const handleRegisterSuccess = () => {
-    // 注册成功后跳转到主页
-    router.replace('/');
+    // 注册成功后跳转到登录页
+    router.push('/login');
   };
 
   return (

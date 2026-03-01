@@ -101,6 +101,26 @@ export function LoginContent({ onLoginPress }: LoginContentProps) {
           </Text>
         </TouchableOpacity>
       </View>
+
+      {/* 隐私政策和服务条款 */}
+      <View style={styles.legalContainer}>
+        <Text style={[styles.legalText, { color: colors.secondary }]}>
+          {t('loginAgree', language) || '登录即表示您同意'}{' '}
+        </Text>
+        <TouchableOpacity>
+          <Text style={[styles.legalLink, { color: colors.primary }]}>
+            {t('termsOfService', language) || '服务条款'}
+          </Text>
+        </TouchableOpacity>
+        <Text style={[styles.legalText, { color: colors.secondary }]}>
+          {' '}{t('and', language) || '和'}{' '}
+        </Text>
+        <TouchableOpacity>
+          <Text style={[styles.legalLink, { color: colors.primary }]}>
+            {t('privacyPolicy', language) || '隐私政策'}
+          </Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 }
@@ -190,5 +210,22 @@ const styles = StyleSheet.create({
   registerLink: {
     fontSize: 14,
     fontWeight: '600',
+  },
+  legalContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    marginTop: 16,
+    paddingHorizontal: 24,
+  },
+  legalText: {
+    fontSize: 12,
+    color: '#9CA3AF',
+  },
+  legalLink: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#3B82F6',
   },
 });
