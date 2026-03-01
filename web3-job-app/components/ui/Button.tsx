@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
+import { TouchableOpacity, View, Text, ActivityIndicator, StyleSheet } from 'react-native';
 import { useThemedColors } from '@/lib/useThemedColors';
 
 interface ButtonProps {
@@ -57,13 +57,15 @@ export function Button({
   };
 
   return (
-    <View
+    <TouchableOpacity
+      onPress={onPress}
+      disabled={disabled || loading}
       style={[
         {
           borderRadius: 12,
           justifyContent: 'center',
           alignItems: 'center',
-          opacity: disabled ? 0.5 : 1,
+          opacity: disabled || loading ? 0.5 : 1,
         },
         getButtonStyle(),
         getSizeStyle(),
@@ -75,6 +77,6 @@ export function Button({
       ) : (
         <Text style={[{ fontSize: 14, fontWeight: '600' }, getTextStyle()]}>{children}</Text>
       )}
-    </View>
+    </TouchableOpacity>
   );
 }
