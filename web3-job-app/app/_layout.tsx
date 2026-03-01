@@ -61,6 +61,11 @@ function RootLayoutNav() {
     loadTheme();
   }, []);
 
+  // 预先获取翻译文本，避免在导航配置中直接调用 t()
+  const jobDetailsTitle = t('jobDetails', language);
+  const backTitle = t('back', language);
+  const loginTitle = t('login', language);
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider value={themeMode === 'dark' ? DarkTheme : DefaultTheme}>
@@ -70,15 +75,15 @@ function RootLayoutNav() {
             <Stack.Screen
               name="job/[id]"
               options={{
-                title: t('jobDetails', language),
-                headerBackTitle: t('back', language),
+                title: jobDetailsTitle,
+                headerBackTitle: backTitle,
               }}
             />
             <Stack.Screen
               name="login"
               options={{
-                title: t('login', language),
-                headerBackTitle: t('back', language),
+                title: loginTitle,
+                headerBackTitle: backTitle,
               }}
             />
           </Stack>
