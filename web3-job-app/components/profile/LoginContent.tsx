@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { useThemedColors } from '@/lib/useThemedColors';
 import { t } from '@/lib/i18n';
 import { useAppStore } from '@/store/app-store';
+import { useRouter } from 'expo-router';
 
 interface LoginContentProps {
   onLoginPress: () => void;
@@ -11,6 +12,7 @@ interface LoginContentProps {
 export function LoginContent({ onLoginPress }: LoginContentProps) {
   const colors = useThemedColors();
   const { language } = useAppStore();
+  const router = useRouter();
 
   const features = [
     {
@@ -93,7 +95,7 @@ export function LoginContent({ onLoginPress }: LoginContentProps) {
         <Text style={[styles.registerText, { color: colors.secondary }]}>
           {t('noAccount', language)}{' '}
         </Text>
-        <TouchableOpacity onPress={() => Alert.alert('敬请期待', '注册功能即将上线')}>
+        <TouchableOpacity onPress={() => router.push('/register')}>
           <Text style={[styles.registerLink, { color: colors.primary }]}>
             {t('register', language)}
           </Text>

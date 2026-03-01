@@ -89,15 +89,30 @@ export const translations = {
     loginError: '登录时出错',
     welcomeBack: '欢迎回来',
     register: '注册',
-    noAccount: '还没有账号？',
-    hasAccount: '已有账号？',
-    toLogin: '去登录',
-    logout: '登出',
+    registerTitle: '创建账号',
+    registerDesc: '填写以下信息创建您的账号',
+    name: '姓名',
+    namePlaceholder: '请输入您的姓名',
     email: '邮箱',
     emailPlaceholder: '请输入邮箱地址',
     password: '密码',
     passwordPlaceholder: '请输入密码',
+    confirmPassword: '确认密码',
+    confirmPasswordPlaceholder: '请再次输入密码',
+    registerButton: '创建账号',
+    registerSuccess: '注册成功',
+    registerFailed: '注册失败',
+    noAccount: '还没有账号？',
+    hasAccount: '已有账号？',
+    toLogin: '去登录',
+    logout: '登出',
     forgotPassword: '忘记密码？',
+    // 表单验证
+    invalidEmail: '请输入有效的邮箱地址',
+    passwordTooShort: '密码长度至少为 6 位',
+    passwordMismatch: '两次输入的密码不一致',
+    emailExists: '该邮箱已被注册',
+    networkError: '网络连接失败，请检查网络设置',
     postJobs: '发布职位',
     postJobsDesc: '发布职位，吸引优秀人才',
     messaging: '消息沟通',
@@ -205,15 +220,30 @@ export const translations = {
     loginError: 'An error occurred during login',
     welcomeBack: 'Welcome back',
     register: 'Register',
-    noAccount: 'Don\'t have an account?',
-    hasAccount: 'Already have an account?',
-    toLogin: 'Login',
-    logout: 'Logout',
+    registerTitle: 'Create Account',
+    registerDesc: 'Fill in the information below to create your account',
+    name: 'Name',
+    namePlaceholder: 'Enter your name',
     email: 'Email',
     emailPlaceholder: 'Enter your email',
     password: 'Password',
     passwordPlaceholder: 'Enter your password',
+    confirmPassword: 'Confirm Password',
+    confirmPasswordPlaceholder: 'Re-enter your password',
+    registerButton: 'Create Account',
+    registerSuccess: 'Registration Successful',
+    registerFailed: 'Registration Failed',
+    noAccount: 'Don\'t have an account?',
+    hasAccount: 'Already have an account?',
+    toLogin: 'Login',
+    logout: 'Logout',
     forgotPassword: 'Forgot password?',
+    // Form Validation
+    invalidEmail: 'Please enter a valid email address',
+    passwordTooShort: 'Password must be at least 6 characters',
+    passwordMismatch: 'Passwords do not match',
+    emailExists: 'This email is already registered',
+    networkError: 'Network connection failed, please check your network',
     postJobs: 'Post Jobs',
     postJobsDesc: 'Post jobs to attract talent',
     messaging: 'Messaging',
@@ -243,7 +273,11 @@ export type TranslationKey = keyof typeof translations.zh |
   'welcomeBack' | 'loginToExplore' | 'postJobs' | 'postJobsDesc' |
   'messaging' | 'messagingDesc' | 'notifications' | 'notificationsDesc' |
   'resumeDesc' | 'loading' | 'error' | 'retry' | 'noJobs' | 'today' |
-  'yesterday' | 'daysAgo' | 'unknown';
+  'yesterday' | 'daysAgo' | 'unknown' |
+  'register' | 'registerTitle' | 'registerDesc' | 'name' | 'namePlaceholder' |
+  'confirmPassword' | 'confirmPasswordPlaceholder' | 'registerButton' |
+  'registerSuccess' | 'registerFailed' | 'invalidEmail' | 'passwordTooShort' |
+  'passwordMismatch' | 'emailExists' | 'networkError';
 
 export function t(key: TranslationKey, lang: Language): string {
   return (translations[lang] as any)[key] || translations.zh[key as keyof typeof translations.zh] || key;

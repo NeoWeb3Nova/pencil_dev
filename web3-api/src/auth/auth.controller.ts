@@ -29,12 +29,15 @@ export class AuthController {
 
   @Post('register')
   async register(@Body() registerDto: RegisterDto) {
-    const result = await this.authService.register(
+    const user = await this.authService.register(
       registerDto.email,
       registerDto.password,
       registerDto.name,
       registerDto.walletAddress,
     );
+
+    // 生成 JWT token
+    const result = await this.authService.login(user);
     return {
       success: true,
       data: result,
