@@ -1,363 +1,361 @@
-# Web3 Job App - 开发环境配置
+# Web3 Jobs - 去中心化招聘平台
 
-## 常见错误与解决方案 (FAQ)
+> 一个基于区块链技术的 Web3 人才招聘平台，连接全球区块链开发者与顶级项目
 
-### 1. 前端网络错误 "Network error"
+[![Platform](https://img.shields.io/badge/Platform-React%20Native-blue)](https://reactnative.dev/)
+[![Backend](https://img.shields.io/badge/Backend-NestJS-red)](https://nestjs.com/)
+[![Database](https://img.shields.io/badge/Database-PostgreSQL-green)](https://www.postgresql.org/)
+[![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 
-**现象**: 应用显示无法连接到后端 API
+---
 
-**原因**: Android 模拟器的 `localhost` 指向模拟器本身，不是宿主机
+## 📱 应用预览
 
-**解决**:
-```typescript
-// lib/api.ts 已修复 - 根据平台自动选择 API 地址
-const getApiBaseUrl = () => {
-  if (Platform.OS === 'android') {
-    return 'http://10.0.2.2:3000/api';  // Android 模拟器
-  }
-  return 'http://localhost:3000/api';   // iOS/Web
-};
+### 首页推荐
+<p align="center">
+  <img src="assets/Screenshot_1772335440.png" width="200" alt="首页"/>
+</p>
+
+### 职位浏览
+<p align="center">
+  <img src="assets/Screenshot_1772335446.png" width="200" alt="职位列表"/>
+</p>
+
+### 发布职位
+<p align="center">
+  <img src="assets/Screenshot_1772335435.png" width="200" alt="发布职位"/>
+</p>
+
+### 消息中心
+<p align="center">
+  <img src="assets/Screenshot_1772335451.png" width="200" alt="消息"/>
+</p>
+
+### 个人中心
+<p align="center">
+  <img src="assets/Screenshot_1772335448.png" width="200" alt="个人中心"/>
+</p>
+
+### 用户注册
+<p align="center">
+  <img src="assets/Screenshot_1772335471.png" width="200" alt="注册"/>
+</p>
+
+---
+
+## ✨ 核心功能
+
+### 👤 求职者
+- 🔐 多种登录方式：邮箱密码 / Web3 钱包签名 (SIWE)
+- 📄 在线简历管理与作品集展示
+- 💼 智能职位推荐与筛选
+- 📬 实时消息通知与面试跟进
+- ⭐ 收藏职位与申请状态追踪
+
+### 🏢 招聘方
+- 📝 一键发布职位（支持加密货币支付）
+- 🎯 精准人才匹配与搜索
+- 💬 与候选人直接沟通
+- 📊 申请管理与筛选工具
+
+### 🔗 Web3 特性
+- 钱包连接与身份验证
+- 加密货币薪资展示（USD/ETH 双标价）
+- 区块链技能标签（Solidity, Web3.js, DeFi 等）
+- 去中心化身份验证 (SIWE - Sign In with Ethereum)
+
+---
+
+## 🛠 技术架构
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Web3 Jobs Platform                        │
+├─────────────────────────────────────────────────────────────┤
+│  ┌─────────────────┐           ┌─────────────────────────┐  │
+│  │   React Native  │◄─────────►│      NestJS Backend     │  │
+│  │   (Expo SDK 55) │   REST    │  ┌───────────────────┐  │  │
+│  │  ┌───────────┐  │   API     │  │  Prisma ORM       │  │  │
+│  │  │ Zustand   │  │           │  │  (PostgreSQL)     │  │  │
+│  │  │ (State)   │  │           │  └───────────────────┘  │  │
+│  │  ┌───────────┐  │           │  ┌───────────────────┐  │  │
+│  │  │React Query│  │           │  │  JWT + Passport   │  │  │
+│  │  │ (Data)    │  │           │  │  Auth System      │  │  │
+│  │  └───────────┘  │           │  └───────────────────┘  │  │
+│  │  NativeWind    │           │  ethers.js / SIWE       │  │
+│  │  (Tailwind)    │           │  Web3 Integration       │  │
+│  └─────────────────┘           └─────────────────────────┘  │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-**检查**:
-```bash
-# 确认后端运行中
-netstat -ano | findstr ":3000"
-curl http://localhost:3000/api/auth/login
+### 前端技术栈
+
+| 技术 | 版本 | 用途 |
+|------|------|------|
+| React Native | 0.83.2 | 跨平台移动应用 |
+| Expo | 55.0.3 | 开发工具链 |
+| TypeScript | 5.9.2 | 类型安全 |
+| Zustand | 5.0.11 | 状态管理 |
+| React Query | 5.90.21 | 数据获取 |
+| NativeWind | 4.2.2 | Tailwind CSS |
+| React Navigation | 7.x | 路由导航 |
+| Lucide Icons | 0.575.0 | 图标系统 |
+| Zod | 4.3.6 | 表单验证 |
+
+### 后端技术栈
+
+| 技术 | 版本 | 用途 |
+|------|------|------|
+| NestJS | 11.0.1 | API 框架 |
+| Prisma | 6.19.2 | 数据库 ORM |
+| PostgreSQL | - | 关系数据库 |
+| JWT | - | 身份认证 |
+| Passport | 0.7.0 | 认证中间件 |
+| ethers.js | 6.16.0 | Web3 交互 |
+| SIWE | 3.0.0 | 钱包登录 |
+| bcrypt | 6.0.0 | 密码加密 |
+
+---
+
+## 📦 项目结构
+
+```
+.
+├── web3-job-app/              # React Native 前端
+│   ├── app/                   # Expo Router 路由
+│   │   ├── (tabs)/           # 底部导航页
+│   │   │   ├── index.tsx     # 首页
+│   │   │   ├── jobs.tsx      # 职位列表
+│   │   │   ├── post.tsx      # 发布职位
+│   │   │   ├── messages.tsx  # 消息
+│   │   │   └── profile.tsx   # 个人中心
+│   │   └── job/[id].tsx      # 职位详情
+│   ├── components/           # UI 组件库
+│   ├── lib/                  # 工具函数
+│   └── store/                # Zustand stores
+│
+├── web3-api/                 # NestJS 后端
+│   ├── src/
+│   │   ├── auth/             # 认证模块
+│   │   ├── users/            # 用户模块
+│   │   ├── jobs/             # 职位模块
+│   │   ├── applications/     # 申请模块
+│   │   ├── messages/         # 消息模块
+│   │   ├── wallet-profiles/  # 钱包档案
+│   │   └── web3/             # 区块链集成
+│   └── prisma/               # 数据库迁移与种子
+│
+└── assets/                   # 项目资源
 ```
 
 ---
 
-### 2. React Hooks 函数未定义错误
+## 🚀 快速开始
 
-**现象**: `Cannot access 'xxx' before initialization`
+### 环境要求
 
-**原因**: `const` 箭头函数不会提升，在 hooks 回调中使用前必须先定义
+- Node.js >= 18.x
+- npm >= 9.x
+- Docker & Docker Compose
+- Expo CLI (前端)
+- NestJS CLI (后端)
 
-**错误模式**:
-```typescript
-// ❌ 错误
-const { data } = useQuery({ select: (d) => formatDate(d.date) });
-const formatDate = () => { ... };
-```
-
-**正确模式**:
-```typescript
-// ✅ 正确
-const formatDate = () => { ... };  // 先定义
-const { data } = useQuery({ select: (d) => formatDate(d.date) });
-```
-
-**规则**: 所有在 hooks 回调中使用的辅助函数，必须在 hooks 之前定义。
-
----
-
-### 3. Prisma 数据库连接失败
-
-**现象**: `PrismaClientInitializationError`
-
-**解决**:
-```bash
-cd web3-api
-docker-compose up -d          # 启动数据库
-npm run prisma:generate       # 生成 Prisma Client
-npm run prisma:migrate        # 运行迁移
-```
-
----
-
-### 4. SecureStore 密钥格式错误
-
-**现象**:
-```
-Invalid key provided to SecureStore. Keys must not be empty and contain only alphanumeric characters, ".", "-", and "_".
-```
-
-**原因**: Expo SecureStore 的密钥只能包含字母数字、`.`、`-`、`_`
-
-**错误示例**:
-```typescript
-const TOKEN_KEY = '@web3job:token';  // ❌ 包含 @ 和 :
-const USER_KEY = '@web3job:user';    // ❌ 包含 @ 和 :
-```
-
-**正确示例**:
-```typescript
-const TOKEN_KEY = 'web3job.token';   // ✅ 使用 . 代替 @ 和 :
-const USER_KEY = 'web3job.user';     // ✅ 使用 . 代替 @ 和 :
-```
-
-**已修复文件**:
-- `web3-job-app/store/authStore.ts`
-- `web3-job-app/lib/api.ts`
-
----
-
-### 5. React Native 渲染错误："Text strings must be rendered within a <Text> component"
-
-**现象**:
-```
-ReactNativeJS: 'Text strings must be rendered within a <Text> component.'
-```
-
-**原因**: 在 React Native 中，所有文本内容必须包裹在 `<Text>` 组件中，不能直接渲染字符串。
-
-**错误模式**:
-```tsx
-// ❌ 错误 - 直接渲染字符串
-<View>
-  {someCondition && 'Some text'}
-</View>
-```
-
-**正确模式**:
-```tsx
-// ✅ 正确 - 包裹在 Text 组件中
-<View>
-  {someCondition && <Text>Some text</Text>}
-</View>
-```
-
-**检查位置**: 通常在堆栈导航、条件渲染或组件 props 传递时容易出现此问题。
-
----
-
-## 快速启动命令
-
-```bash
-# 1. 启动数据库
-cd web3-api && docker-compose up -d
-
-# 2. 启动后端 (新终端)
-cd web3-api && npm run start:dev
-
-# 3. 启动前端 (新终端)
-cd web3-job-app && npm start
-```
-
----
-
-## Android 环境变量配置
-
-### 问题说明
-`.env.local` 文件中的环境变量不会自动加载到系统 `PATH` 中，需要在系统层面配置 Android 开发环境。
-
----
-
-## 快速配置（推荐）
-
-### 使用自动配置脚本
-
-以管理员身份运行 PowerShell 脚本：
-
-```powershell
-# 方法 1: 在 PowerShell 中执行（右键以管理员身份运行）
-.\setup-android-env.ps1
-
-# 方法 2: 使用命令直接提权运行
-Start-Process powershell -Verb RunAs -ArgumentList '-ExecutionPolicy Bypass -File .\setup-android-env.ps1'
-```
-
-**运行后需要重启终端/VS Code 才能生效**
-
----
-
-## 手动配置（Windows 10/11）
-
-1. 按 `Win + S` 搜索 **"编辑系统环境变量"**
-2. 点击 **"环境变量..."** 按钮
-3. 在 **"系统变量"** 部分：
-   - 新建 `ANDROID_HOME`，值为：`C:\Users\almyq\AppData\Local\Android\Sdk`
-   - 编辑 `Path`，添加以下路径：
-     ```
-     C:\Users\almyq\AppData\Local\Android\Sdk
-     C:\Users\almyq\AppData\Local\Android\Sdk\platform-tools
-     C:\Users\almyq\AppData\Local\Android\Sdk\tools
-     C:\Users\almyq\AppData\Local\Android\Sdk\tools\bin
-     C:\Users\almyq\AppData\Local\Android\Sdk\emulator
-     ```
-4. 点击 **"确定"** 保存
-5. **重启终端/VS Code**
-
----
-
-## 临时启动（不修改系统环境变量）
-
-双击运行或在终端执行：
+### 1. 克隆项目
 
 ```bash
-.\start-android.bat
+git clone https://github.com/your-username/web3-jobs.git
+cd web3-jobs
 ```
 
----
-
-## 验证配置
-
-在新的终端中运行：
-
-```powershell
-# 检查 ANDROID_HOME
-echo $env:ANDROID_HOME
-
-# 检查 ADB
-adb --version
-```
-
----
-
-## 项目结构
-
-- `web3-api/` - NestJS 后端 API
-- `web3-job-app/` - React Native (Expo) 前端
-
-详细命令请参考 `CLAUDE.md`
-
----
-
-## Docker 数据库配置
-
-### 启动 PostgreSQL 容器
+### 2. 启动数据库
 
 ```bash
 cd web3-api
 docker-compose up -d
 ```
 
-### 常用命令
+### 3. 配置后端
 
 ```bash
-# 查看容器状态
-docker ps -a
-
-# 启动/停止/重启容器
-docker start web3-job-app-db
-docker stop web3-job-app-db
-docker restart web3-job-app-db
-
-# 查看日志
-docker logs web3-job-app-db
-
-# 健康检查
-docker inspect web3-job-app-db --format '{{.State.Health.Status}}'
-
-# 完全停止并移除容器（数据卷保留）
-docker-compose down
-
-# ⚠️ 删除数据卷（数据会丢失！）
-docker-compose down -v
-```
-
-### 数据库连接配置
-
-| 场景 | DATABASE_URL |
-|------|-------------|
-| Windows 主机 + Docker Desktop | `postgresql://postgres:postgres@127.0.0.1:5432/web3-job-app` |
-| Linux 虚拟机原生 Docker | `postgresql://postgres:postgres@localhost:5432/web3-job-app` |
-| 容器内访问（API 容器化时） | `postgresql://postgres:postgres@web3-job-app-db:5432/web3-job-app` |
-
----
-
-## 虚拟机测试注意事项
-
-### 1. Docker 容器必须保持运行
-
-PostgreSQL 数据库运行在 Docker 容器中，测试期间需要保持容器运行：
-- 容器停止 = 数据库不可访问
-- 数据存储在 Docker volume 中，重启容器不会丢失数据
-
-### 2. 完整启动顺序
-
-```bash
-# 1. 启动数据库
 cd web3-api
-docker-compose up -d
 
-# 2. 等待数据库就绪（约 5-10 秒）
-docker-compose logs -f postgres
+# 安装依赖
+npm install
 
-# 3. 运行数据库迁移
+# 复制环境变量
+cp .env.example .env
+
+# 生成 Prisma Client
+npm run prisma:generate
+
+# 运行数据库迁移
 npm run prisma:migrate
 
-# 4. 启动 API 服务
+# 插入测试数据
+npm run prisma:seed
+
+# 启动开发服务器
 npm run start:dev
+```
 
-# 5. 启动前端（可选）
-cd ../web3-job-app
+### 4. 启动前端
+
+```bash
+cd web3-job-app
+
+# 安装依赖
+npm install
+
+# 启动 Expo
 npm start
-```
 
-### 3. 防火墙配置（虚拟机）
-
-如需从外部访问虚拟机：
-
-```bash
-# 开放 PostgreSQL 端口
-sudo ufw allow 5432/tcp
-
-# 开放 API 端口
-sudo ufw allow 3000/tcp
-```
-
-### 4. 健康检查脚本
-
-```bash
-# 检查数据库连接
-docker exec web3-job-app-db pg_isready -U postgres
-
-# 检查端口监听
-netstat -tlnp | grep 5432
+# 扫描屏幕二维码在真机上运行
+# 或按 a 在 Android 模拟器 / i 在 iOS 模拟器
 ```
 
 ---
 
-## 安全配置（部署前必须修改）
+## 📖 API 文档
 
-### 修改 `.env` 中的敏感信息
+### 认证接口
 
-编辑 `web3-api/.env` 文件：
+| 方法 | 端点 | 描述 |
+|------|------|------|
+| POST | `/api/auth/register` | 用户注册 |
+| POST | `/api/auth/login` | 邮箱登录 |
+| POST | `/api/auth/siwe` | 钱包签名登录 |
+| GET | `/api/auth/profile` | 获取用户信息 |
 
-```bash
-# ⚠️ 生产环境必须修改为强随机字符串
-JWT_SECRET=your-super-secret-jwt-key-change-in-production
+### 职位接口
 
-# ⚠️ 修改数据库密码
-POSTGRES_PASSWORD=postgres  # 改为强密码
+| 方法 | 端点 | 描述 |
+|------|------|------|
+| GET | `/api/jobs` | 获取职位列表 |
+| GET | `/api/jobs/:id` | 获取职位详情 |
+| POST | `/api/jobs` | 发布职位 (需认证) |
+| PUT | `/api/jobs/:id` | 更新职位 (需认证) |
+| DELETE | `/api/jobs/:id` | 删除职位 (需认证) |
+
+### 申请接口
+
+| 方法 | 端点 | 描述 |
+|------|------|------|
+| POST | `/api/applications` | 申请职位 (需认证) |
+| GET | `/api/applications/my` | 我的申请 (需认证) |
+
+---
+
+## 🧪 测试账户
+
+项目包含预置的测试账户：
+
+```
+管理员账户:
+邮箱：admin@web3jobs.com
+密码：password123
+
+普通用户:
+邮箱：user@web3jobs.com
+密码：password123
 ```
 
-### 生成强随机 JWT_SECRET
+---
 
+## 🔒 安全配置
+
+### 生产环境部署
+
+在部署到生产环境前，请确保：
+
+1. **修改 JWT 密钥**
 ```bash
-# OpenSSL 生成
+# 生成强随机密钥
 openssl rand -base64 32
-
-# 或使用 Node.js
+# 或
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
-### 安全清单
+2. **修改数据库密码**
+```bash
+# 编辑 web3-api/.env
+POSTGRES_PASSWORD=<你的强密码>
+```
 
-- [ ] 不使用默认密码 `postgres`
-- [ ] JWT_SECRET 长度至少 32 字符
-- [ ] `.env` 文件不提交到 Git（已加入 `.gitignore`）
-- [ ] 虚拟机防火墙限制外部访问
-- [ ] 定期备份数据库数据
+3. **配置 HTTPS**
+```bash
+# 使用 Nginx 或 Vercel 等反向代理
+```
 
 ---
 
-## 数据持久化
+## 📝 开发说明
 
-数据存储在 Docker volume `postgres_data` 中：
+### 数据库操作
 
-```yaml
-volumes:
-  - postgres_data:/var/lib/postgresql/data  # 持久化数据
-```
-
-**备份数据：**
 ```bash
-# 导出数据
-docker exec web3-job-app-db pg_dump -U postgres web3-job-app > backup.sql
+cd web3-api
 
-# 恢复数据
-docker exec -i web3-job-app-db psql -U postgres web3-job-app < backup.sql
+# 查看数据库
+npm run prisma:studio
+
+# 创建新迁移
+npx prisma migrate dev --name <description>
+
+# 重置数据库 (开发环境)
+npx prisma migrate reset
 ```
+
+### 前端调试
+
+```bash
+cd web3-job-app
+
+# 清除缓存重启
+npx expo start -c
+
+# 生成新的构建
+npx expo run:android
+npx expo run:ios
+```
+
+---
+
+## 🤝 贡献
+
+欢迎贡献代码！请遵循以下步骤：
+
+1. Fork 本仓库
+2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 开启 Pull Request
+
+---
+
+## 📄 开源协议
+
+MIT License - 详见 [LICENSE](LICENSE) 文件
+
+---
+
+## 📬 联系方式
+
+- 作者：woyaoyanpai
+- 邮箱：woyao@test.com
+- 项目链接：https://github.com/your-username/web3-jobs
+
+---
+
+## 🙏 致谢
+
+- [NestJS](https://nestjs.com/) - 优秀的 Node.js 框架
+- [Prisma](https://www.prisma.io/) - 下一代数据库 ORM
+- [Expo](https://expo.dev/) - React Native 开发平台
+- [Ethers.js](https://docs.ethers.org/) - 以太坊交互库
+- [SIWE](https://login.xyz/) - 去中心化身份认证
+
+---
+
+<div align="center">
+  <strong>Made with ❤️ for Web3 Community</strong>
+</div>
