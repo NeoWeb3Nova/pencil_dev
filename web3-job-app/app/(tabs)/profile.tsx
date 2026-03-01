@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Alert } from 'react-native';
+import { StyleSheet, View, Alert, Text } from 'react-native';
 import { useThemedColors } from '@/lib/useThemedColors';
 import { ProfileContent } from '@/components/profile/ProfileContent';
 import { LanguageSelector } from '@/components/profile/LanguageSelector';
@@ -56,7 +56,7 @@ export default function ProfileScreen() {
     return (
       <View style={[styles.container, { backgroundColor: colors.background }]}>
         <View style={styles.loadingContainer}>
-          <View style={{ fontSize: 40 }}>⏳</View>
+          <Text style={{ fontSize: 40 }}>⏳</Text>
         </View>
       </View>
     );
