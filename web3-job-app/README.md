@@ -172,3 +172,169 @@ export async function getJobs() {
 ## 📄 License
 
 MIT
+
+---
+
+## 🔁 重置测试环境 SOP
+
+### 快速重置步骤
+
+#### 1. 清理旧进程
+
+```bash
+# Windows - 清理 Expo 端口 (8081)
+netstat -ano | findstr ":8081" | findstr "LISTENING" | awk '{print $5}' | xargs -I {} taskkill //F //PID {}
+
+# Windows - 清理后端端口 (3000)
+netstat -ano | findstr ":3000" | findstr "LISTENING" | awk '{print $5}' | xargs -I {} taskkill //F //PID {}
+```
+
+或者手动查找并终止：
+```bash
+# 查找占用端口的进程
+netstat -ano | findstr ":8081"
+netstat -ano | findstr ":3000"
+
+# 终止进程 (替换 <PID> 为实际进程 ID)
+taskkill //F //PID <PID>
+```
+
+#### 2. 重启后端服务
+
+```bash
+cd web3-api
+
+# 确保数据库运行中
+docker-compose up -d
+
+# (可选) 如果 Prisma 报错，重新生成 Client
+npm run prisma:generate
+
+# 启动后端
+npm run start:dev
+```
+
+**验证后端启动成功：**
+```bash
+curl http://localhost:3000/api
+# 预期输出：Hello World!
+```
+
+#### 3. 启动前端
+
+```bash
+cd web3-job-app
+
+# 方式一：使用 Expo Go (推荐)
+npm start
+
+# 方式二：直接在 Android 模拟器运行
+npm run android
+```
+
+---
+
+### 一键重置脚本
+
+#### Windows PowerShell (`reset-env.ps1`)
+
+```powershell
+Write-Host "=== 重置测试环境 ===" -ForegroundColor Green
+
+# 1. 清理旧进程
+Write-Host "`n[1/3] 清理旧进程..." -ForegroundColor Yellow
+
+$expoPid = Get-NetTCPConnection -LocalPort 8081 -ErrorAction SilentlyContinue | Select-Object -ExpandProperty OwningProcess -Unique
+if ($expoPid) { Stop-Process -Id $expoPid -Force -ErrorAction SilentlyContinue }
+
+$backendPid = Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue | Select-Object -ExpandProperty OwningProcess -Unique
+if ($backendPid) { Stop-Process -Id $backendPid -Force -ErrorAction SilentlyContinue }
+
+Start-Sleep -Seconds 2
+
+# 2. 启动后端
+Write-Host "`n[2/3] 启动后端服务..." -ForegroundColor Yellow
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$PSScriptRoot\web3-api'; npm run start:dev"
+
+Start-Sleep -Seconds 5
+
+# 3. 提示
+Write-Host "`n[3/3] 启动前端服务" -ForegroundColor Yellow
+Write-Host "请手动运行：cd web3-job-app && npm run android" -ForegroundColor Cyan
+Write-Host "`n=== 环境重置完成 ===" -ForegroundColor Green
+```
+
+使用方法：
+```powershell
+.\reset-env.ps1
+```
+
+#### Bash 脚本 (`reset-env.sh`)
+
+```bash
+#!/bin/bash
+
+echo "=== 重置测试环境 ==="
+
+# 清理端口
+for port in 8081 3000; do
+    pid=$(netstat -ano | grep ":$port" | grep "LISTENING" | awk '{print $5}' | head -1)
+    if [ ! -z "$pid" ]; then
+        echo "终止端口 $port 的进程 (PID: $pid)"
+        kill -9 $pid 2>/dev/null
+    fi
+done
+
+sleep 2
+
+# 启动后端
+echo -e "\n启动后端服务..."
+cd "$(dirname "$0")/web3-api"
+npm run start:dev > /dev/null 2>&1 &
+
+sleep 5
+
+echo -e "\n请手动运行：cd web3-job-app && npm run android"
+echo "=== 环境重置完成 ==="
+```
+
+使用方法：
+```bash
+chmod +x reset-env.sh && ./reset-env.sh
+```
+
+---
+
+### 常见问题排查
+
+| 问题 | 错误信息 | 解决方案 |
+|------|----------|----------|
+| 端口被占用 | `EADDRINUSE: address already in use` | `netstat -ano \| findstr ":3000"` 然后 `taskkill //F //PID <PID>` |
+| Prisma 生成失败 | `EPERM: operation not permitted` | 先终止后端进程，再运行 `npm run prisma:generate` |
+| 数据库连接失败 | `PrismaClientInitializationError` | `docker-compose restart` 然后 `npm run prisma:migrate` |
+| Android Network Error | `Network error` | 确保 API 地址配置为 `http://10.0.2.2:3000/api` |
+
+---
+
+### 测试账号
+
+| 邮箱 | 密码 | 角色 |
+|------|------|------|
+| `admin@web3jobs.com` | `password123` | Admin |
+| `user@web3jobs.com` | `password123` | User |
+| `test@test.com` | `password123` | User |
+| `demo@demo.com` | `123456` | User |
+
+---
+
+### 验证清单
+
+- [ ] 后端 API 可访问：`curl http://localhost:3000/api`
+- [ ] 数据库容器运行中：`docker-compose ps`
+- [ ] Metro Bundler 启动：`http://localhost:8081`
+- [ ] 应用可在模拟器/手机上运行
+- [ ] 注册功能测试通过
+
+---
+
+**最后更新：** 2026-03-01
